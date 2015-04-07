@@ -1,6 +1,6 @@
 <?php
 
-namespace Github\Tests\Mock;
+namespace serverdensity\Tests\Mock;
 
 use Guzzle\Http\Message\Response;
 
@@ -27,9 +27,9 @@ class TestResponse extends Response
     public function getHeader($header = null)
     {
         if ($this->loopCount) {
-            $header = sprintf('<https://api.github.com/%d>; rel="next"', $this->loopCount);
+            $header = sprintf('<https://api.serverdensity.io/%d>; rel="next"', $this->loopCount);
         } else {
-            $header = '<https://api.github.com/prev>; rel="prev"';
+            $header = '<https://api.serverdensity.io/prev>; rel="prev"';
         }
 
         $this->loopCount--;

@@ -1,10 +1,10 @@
 <?php
 
-namespace Github\Tests\HttpClient;
+namespace serverdensity\Tests\HttpClient;
 
-use Github\Client;
-use Github\HttpClient\HttpClient;
-use Github\HttpClient\Message\ResponseMediator;
+use serverdensity\Client;
+use serverdensity\HttpClient\HttpClient;
+use serverdensity\HttpClient\Message\ResponseMediator;
 use Guzzle\Http\Message\Response;
 use Guzzle\Plugin\Mock\MockPlugin;
 use Guzzle\Http\Client as GuzzleClient;
@@ -52,7 +52,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $listeners);
 
         $authListener = $listeners[1][0];
-        $this->assertInstanceOf('Github\HttpClient\Listener\AuthListener', $authListener);
+        $this->assertInstanceOf('serverdensity\HttpClient\Listener\AuthListener', $authListener);
     }
 
     public function getAuthenticationFullData()
@@ -221,7 +221,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Github\Exception\ApiLimitExceedException
+     * @expectedException \serverdensity\Exception\ApiLimitExceedException
      */
     public function shouldThrowExceptionWhenApiIsExceeded()
     {
@@ -244,7 +244,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Github\Exception\TwoFactorAuthenticationRequiredException
+     * @expectedException \serverdensity\Exception\TwoFactorAuthenticationRequiredException
      */
     public function shouldForwardTwoFactorAuthenticationExceptionWhenItHappens()
     {
@@ -253,7 +253,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $headers    = array('c' => 'd');
 
         $response = new Response(401);
-        $response->addHeader('X-GitHub-OTP', 'required; sms');
+        $response->addHeader('X-serverdensity-OTP', 'required; sms');
 
         $mockPlugin = new MockPlugin();
         $mockPlugin->addResponse($response);

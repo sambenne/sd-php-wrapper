@@ -1,8 +1,8 @@
 <?php
 
-namespace Github\Tests\Mock;
+namespace serverdensity\Tests\Mock;
 
-use Github\HttpClient\HttpClientInterface;
+use serverdensity\HttpClient\HttpClientInterface;
 
 class TestHttpClient implements HttpClientInterface
 {

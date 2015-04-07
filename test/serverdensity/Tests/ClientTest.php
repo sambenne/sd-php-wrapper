@@ -1,10 +1,10 @@
 <?php
 
-namespace Github\Tests;
+namespace serverdensity\Tests;
 
-use Github\Client;
-use Github\Exception\InvalidArgumentException;
-use Github\Exception\BadMethodCallException;
+use serverdensity\Client;
+use serverdensity\Exception\InvalidArgumentException;
+use serverdensity\Exception\BadMethodCallException;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +15,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $client = new Client();
 
-        $this->assertInstanceOf('Github\HttpClient\HttpClient', $client->getHttpClient());
+        $this->assertInstanceOf('serverdensity\HttpClient\HttpClient', $client->getHttpClient());
     }
 
     /**
@@ -25,7 +25,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $client = new Client($this->getHttpClientMock());
 
-        $this->assertInstanceOf('Github\HttpClient\HttpClientInterface', $client->getHttpClient());
+        $this->assertInstanceOf('serverdensity\HttpClient\HttpClientInterface', $client->getHttpClient());
     }
 
     /**
@@ -159,45 +159,45 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function getApiClassesProvider()
     {
         return array(
-            array('user', 'Github\Api\User'),
-            array('users', 'Github\Api\User'),
+            array('user', 'serverdensity\Api\User'),
+            array('users', 'serverdensity\Api\User'),
 
-            array('me', 'Github\Api\CurrentUser'),
-            array('current_user', 'Github\Api\CurrentUser'),
-            array('currentUser', 'Github\Api\CurrentUser'),
+            array('me', 'serverdensity\Api\CurrentUser'),
+            array('current_user', 'serverdensity\Api\CurrentUser'),
+            array('currentUser', 'serverdensity\Api\CurrentUser'),
 
-            array('git', 'Github\Api\GitData'),
-            array('git_data', 'Github\Api\GitData'),
-            array('gitData', 'Github\Api\GitData'),
+            array('git', 'serverdensity\Api\GitData'),
+            array('git_data', 'serverdensity\Api\GitData'),
+            array('gitData', 'serverdensity\Api\GitData'),
 
-            array('gist', 'Github\Api\Gists'),
-            array('gists', 'Github\Api\Gists'),
+            array('gist', 'serverdensity\Api\Gists'),
+            array('gists', 'serverdensity\Api\Gists'),
 
-            array('issue', 'Github\Api\Issue'),
-            array('issues', 'Github\Api\Issue'),
+            array('issue', 'serverdensity\Api\Issue'),
+            array('issues', 'serverdensity\Api\Issue'),
 
-            array('markdown', 'Github\Api\Markdown'),
+            array('markdown', 'serverdensity\Api\Markdown'),
 
-            array('organization', 'Github\Api\Organization'),
-            array('organizations', 'Github\Api\Organization'),
+            array('organization', 'serverdensity\Api\Organization'),
+            array('organizations', 'serverdensity\Api\Organization'),
 
-            array('repo', 'Github\Api\Repo'),
-            array('repos', 'Github\Api\Repo'),
-            array('repository', 'Github\Api\Repo'),
-            array('repositories', 'Github\Api\Repo'),
+            array('repo', 'serverdensity\Api\Repo'),
+            array('repos', 'serverdensity\Api\Repo'),
+            array('repository', 'serverdensity\Api\Repo'),
+            array('repositories', 'serverdensity\Api\Repo'),
 
-            array('search', 'Github\Api\Search'),
+            array('search', 'serverdensity\Api\Search'),
 
-            array('pr', 'Github\Api\PullRequest'),
-            array('pullRequest', 'Github\Api\PullRequest'),
-            array('pull_request', 'Github\Api\PullRequest'),
-            array('pullRequests', 'Github\Api\PullRequest'),
-            array('pull_requests', 'Github\Api\PullRequest'),
+            array('pr', 'serverdensity\Api\PullRequest'),
+            array('pullRequest', 'serverdensity\Api\PullRequest'),
+            array('pull_request', 'serverdensity\Api\PullRequest'),
+            array('pullRequests', 'serverdensity\Api\PullRequest'),
+            array('pull_requests', 'serverdensity\Api\PullRequest'),
 
-            array('authorization', 'Github\Api\Authorizations'),
-            array('authorizations', 'Github\Api\Authorizations'),
+            array('authorization', 'serverdensity\Api\Authorizations'),
+            array('authorizations', 'serverdensity\Api\Authorizations'),
 
-            array('meta', 'Github\Api\Meta')
+            array('meta', 'serverdensity\Api\Meta')
         );
     }
 
@@ -208,6 +208,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             $methods
         );
 
-        return $this->getMock('Github\HttpClient\HttpClientInterface', $methods);
+        return $this->getMock('serverdensity\HttpClient\HttpClientInterface', $methods);
     }
 }
