@@ -1,8 +1,8 @@
 <?php
 
-namespace Github\HttpClient;
+namespace serverdensity\HttpClient;
 
-use Github\Exception\InvalidArgumentException;
+use serverdensity\Exception\InvalidArgumentException;
 use Guzzle\Http\Message\Response;
 
 /**

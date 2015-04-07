@@ -1,10 +1,10 @@
 <?php
 
-namespace Github\HttpClient\Listener;
+namespace serverdensity\HttpClient\Listener;
 
 use Guzzle\Common\Event;
-use Github\Client;
-use Github\Exception\RuntimeException;
+use serverdensity\Client;
+use serverdensity\Exception\RuntimeException;
 
 class AuthListener
 {

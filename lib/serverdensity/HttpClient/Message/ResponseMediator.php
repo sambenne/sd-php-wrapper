@@ -1,9 +1,9 @@
 <?php
 
-namespace Github\HttpClient\Message;
+namespace serverdensity\HttpClient\Message;
 
 use Guzzle\Http\Message\Response;
-use Github\Exception\ApiLimitExceedException;
+use serverdensity\Exception\ApiLimitExceedException;
 
 class ResponseMediator
 {

@@ -1,15 +1,15 @@
 <?php
 
-namespace Github\HttpClient\Listener;
+namespace serverdensity\HttpClient\Listener;
 
-use Github\Exception\TwoFactorAuthenticationRequiredException;
-use Github\HttpClient\Message\ResponseMediator;
+use serverdensity\Exception\TwoFactorAuthenticationRequiredException;
+use serverdensity\HttpClient\Message\ResponseMediator;
 use Guzzle\Common\Event;
 use Guzzle\Http\Message\Response;
-use Github\Exception\ApiLimitExceedException;
-use Github\Exception\ErrorException;
-use Github\Exception\RuntimeException;
-use Github\Exception\ValidationFailedException;
+use serverdensity\Exception\ApiLimitExceedException;
+use serverdensity\Exception\ErrorException;
+use serverdensity\Exception\RuntimeException;
+use serverdensity\Exception\ValidationFailedException;
 
 /**
  * @author Joseph Bielawski <stloyd@gmail.com>

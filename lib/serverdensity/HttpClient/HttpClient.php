@@ -1,16 +1,16 @@
 <?php
 
-namespace Github\HttpClient;
+namespace serverdensity\HttpClient;
 
-use Github\Exception\TwoFactorAuthenticationRequiredException;
+use serverdensity\Exception\TwoFactorAuthenticationRequiredException;
 use Guzzle\Http\Client as GuzzleClient;
 use Guzzle\Http\ClientInterface;
 use Guzzle\Http\Message\Request;
 use Guzzle\Http\Message\Response;
-use Github\Exception\ErrorException;
-use Github\Exception\RuntimeException;
-use Github\HttpClient\Listener\AuthListener;
-use Github\HttpClient\Listener\ErrorListener;
+use serverdensity\Exception\ErrorException;
+use serverdensity\Exception\RuntimeException;
+use serverdensity\HttpClient\Listener\AuthListener;
+use serverdensity\HttpClient\Listener\ErrorListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
