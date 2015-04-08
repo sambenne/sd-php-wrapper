@@ -1,8 +1,8 @@
 <?php
 
-namespace Github\Tests\HttpClient;
+namespace serverdensity\Tests\HttpClient;
 
-use Github\HttpClient\Listener\ErrorListener;
+use serverdensity\HttpClient\Listener\ErrorListener;
 
 class ErrorListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,7 +22,7 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Github\Exception\ApiLimitExceedException
+     * @expectedException \serverdensity\Exception\ApiLimitExceedException
      */
     public function shouldFailWhenApiLimitWasExceed()
     {
@@ -41,7 +41,7 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Github\Exception\RuntimeException
+     * @expectedException \serverdensity\Exception\RuntimeException
      */
     public function shouldNotPassWhenContentWasNotValidJson()
     {
@@ -63,7 +63,7 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Github\Exception\RuntimeException
+     * @expectedException \serverdensity\Exception\RuntimeException
      */
     public function shouldNotPassWhenContentWasValidJsonButStatusIsNotCovered()
     {
@@ -88,7 +88,7 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Github\Exception\ErrorException
+     * @expectedException \serverdensity\Exception\ErrorException
      */
     public function shouldNotPassWhen400IsSent()
     {
@@ -114,7 +114,7 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @dataProvider getErrorCodesProvider
-     * @expectedException \Github\Exception\ValidationFailedException
+     * @expectedException \serverdensity\Exception\ValidationFailedException
      */
     public function shouldNotPassWhen422IsSentWithErrorCode($errorCode)
     {
@@ -151,7 +151,7 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Github\Exception\TwoFactorAuthenticationRequiredException
+     * @expectedException \serverdensity\Exception\TwoFactorAuthenticationRequiredException
      */
     public function shouldThrowTwoFactorAuthenticationRequiredException()
     {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Github\Tests\HttpClient;
+namespace serverdensity\Tests\HttpClient;
 
 use Guzzle\Http\Message\Request;
-use Github\Client;
-use Github\HttpClient\Listener\AuthListener;
+use serverdensity\Client;
+use serverdensity\HttpClient\Listener\AuthListener;
 
 class AuthListenerTest extends \PHPUnit_Framework_TestCase
 {
