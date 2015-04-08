@@ -28,8 +28,6 @@ class HttpClient implements HttpClientInterface
 
         'api_limit'   => 5000,
         'api_version' => 'v2',
-
-        'cache_dir'   => null
     );
 
     protected $headers = array();

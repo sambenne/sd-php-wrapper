@@ -58,10 +58,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
     public function getAuthenticationFullData()
     {
         return array(
-            array('login', 'password', Client::AUTH_HTTP_PASSWORD),
-            array('token', null, Client::AUTH_HTTP_TOKEN),
-            array('token', null, Client::AUTH_URL_TOKEN),
-            array('client_id', 'client_secret', Client::AUTH_URL_CLIENT_ID),
+            array('token', null, Client::AUTH_URL_TOKEN)
         );
     }
 

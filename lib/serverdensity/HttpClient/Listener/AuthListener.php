@@ -27,35 +27,10 @@ class AuthListener
         }
 
         switch ($this->method) {
-            case Client::AUTH_HTTP_PASSWORD:
-                $event['request']->setHeader(
-                    'Authorization',
-                    sprintf('Basic %s', base64_encode($this->tokenOrLogin . ':' . $this->password))
-                );
-                break;
-
-            case Client::AUTH_HTTP_TOKEN:
-                $event['request']->setHeader('Authorization', sprintf('token %s', $this->tokenOrLogin));
-                break;
-
-            case Client::AUTH_URL_CLIENT_ID:
-                $url = $event['request']->getUrl();
-
-                $parameters = array(
-                    'client_id'     => $this->tokenOrLogin,
-                    'client_secret' => $this->password,
-                );
-
-                $url .= (false === strpos($url, '?') ? '?' : '&');
-                $url .= utf8_encode(http_build_query($parameters, '', '&'));
-
-                $event['request']->setUrl($url);
-                break;
-
             case Client::AUTH_URL_TOKEN:
                 $url = $event['request']->getUrl();
                 $url .= (false === strpos($url, '?') ? '?' : '&');
-                $url .= utf8_encode(http_build_query(array('access_token' => $this->tokenOrLogin), '', '&'));
+                $url .= utf8_encode(http_build_query(array('token' => $this->tokenOrLogin), '', '&'));
 
                 $event['request']->setUrl($url);
                 break;
