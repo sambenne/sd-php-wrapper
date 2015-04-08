@@ -173,25 +173,6 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $httpClient->request($path, $body, 'HEAD', $options);
     }
 
-    /**
-     * @test
-     */
-    public function shouldHandlePagination()
-    {
-        $path       = '/some/path';
-        $body       = 'a = b';
-        $headers    = array('c' => 'd');
-
-        $response = new Response(200);
-        $response->addHeader('Link', "<page1>; rel=\"page2\", \n<page3>; rel=\"page4\"");
-
-        $client = $this->getBrowserMock();
-
-        $httpClient = new HttpClient(array(), $client);
-        $httpClient->request($path, $body, 'HEAD', $headers);
-
-        $this->assertEquals(array('page2' => 'page1', 'page4' => 'page3'), ResponseMediator::getPagination($response));
-    }
 
     /**
      * @test

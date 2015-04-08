@@ -19,26 +19,6 @@ class ResponseMediator
         return $content;
     }
 
-    public static function getPagination(Response $response)
-    {
-        $header = $response->getHeader('Link');
-
-        if (empty($header)) {
-            return null;
-        }
-
-        $pagination = array();
-        foreach (explode(',', $header) as $link) {
-            preg_match('/<(.*)>; rel="(.*)"/i', trim($link, ','), $match);
-
-            if (3 === count($match)) {
-                $pagination[$match[2]] = $match[1];
-            }
-        }
-
-        return $pagination;
-    }
-
     public static function getApiLimit(Response $response)
     {
         $remainingCalls = $response->getHeader('X-RateLimit-Remaining');
