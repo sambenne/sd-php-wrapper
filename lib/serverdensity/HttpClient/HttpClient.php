@@ -14,20 +14,20 @@ use serverdensity\HttpClient\Listener\ErrorListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Performs requests on GitHub API. API documentation should be self-explanatory.
+ * Performs requests on Server Density API. API documentation should be self-explanatory.
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
  */
 class HttpClient implements HttpClientInterface
 {
     protected $options = array(
-        'base_url'    => 'https://api.github.com/',
+        'base_url'    => 'https://api.serverdensity.io/',
 
-        'user_agent'  => 'php-github-api (http://github.com/KnpLabs/php-github-api)',
+        'user_agent'  => 'SD-php-api (http://github.com/serverdensity/SD-php-api)',
         'timeout'     => 10,
 
         'api_limit'   => 5000,
-        'api_version' => 'v3',
+        'api_version' => 'v2',
 
         'cache_dir'   => null
     );

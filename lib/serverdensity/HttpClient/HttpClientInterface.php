@@ -6,7 +6,7 @@ use serverdensity\Exception\InvalidArgumentException;
 use Guzzle\Http\Message\Response;
 
 /**
- * Performs requests on GitHub API. API documentation should be self-explanatory.
+ * Performs requests on Server Density API. API documentation should be self-explanatory.
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
  */
