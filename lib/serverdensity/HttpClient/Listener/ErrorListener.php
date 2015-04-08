@@ -45,14 +45,6 @@ class ErrorListener
                 throw new ApiLimitExceedException($this->options['api_limit']);
             }
 
-            if (401 === $response->getStatusCode()) {
-                if ($response->hasHeader('X-GitHub-OTP') && 0 === strpos((string) $response->getHeader('X-GitHub-OTP'), 'required;')) {
-                    $type = substr((string) $response->getHeader('X-GitHub-OTP'), 9);
-
-                    throw new TwoFactorAuthenticationRequiredException($type);
-                }
-            }
-
             $content = ResponseMediator::getContent($response);
             if (is_array($content) && isset($content['message'])) {
                 if (400 == $response->getStatusCode()) {
