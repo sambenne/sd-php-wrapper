@@ -32,6 +32,13 @@ class Client
         'timeout' => 10
     );
 
+    public function api($name) {
+        switch($name){
+            default:
+                throw new InvalidArgumentException(sprintf('Undefined api instance called: "%s"', $name));
+        }
+    }
+
     /**
      * Authenticate a user for all next requests.
      *
@@ -50,7 +57,7 @@ class Client
             $authMethod = self::AUTH_URL_TOKEN;
         }
 
-        $this->getHttpClient()->authenticate($token, $authmethod);
+        $this->getHttpClient()->authenticate($token, $authMethod);
     }
 
     /**
