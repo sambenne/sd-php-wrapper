@@ -39,14 +39,14 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider getAuthenticationFullData
      */
-    public function shouldAuthenticateUsingAllGivenParameters($login, $password, $method)
+    public function shouldAuthenticateUsingAllGivenParameters($token, $method)
     {
         $client = new GuzzleClient();
         $listeners = $client->getEventDispatcher()->getListeners('request.before_send');
         $this->assertCount(1, $listeners);
 
         $httpClient = new TestHttpClient(array(), $client);
-        $httpClient->authenticate($login, $password, $method);
+        $httpClient->authenticate($token, $method);
 
         $listeners = $client->getEventDispatcher()->getListeners('request.before_send');
         $this->assertCount(2, $listeners);

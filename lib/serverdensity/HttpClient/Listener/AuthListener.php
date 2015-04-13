@@ -8,14 +8,12 @@ use serverdensity\Exception\RuntimeException;
 
 class AuthListener
 {
-    private $tokenOrLogin;
-    private $password;
+    private $token;
     private $method;
 
-    public function __construct($tokenOrLogin, $password = null, $method)
+    public function __construct($token, $method)
     {
-        $this->tokenOrLogin = $tokenOrLogin;
-        $this->password = $password;
+        $this->token = $token;
         $this->method = $method;
     }
 
@@ -30,7 +28,7 @@ class AuthListener
             case Client::AUTH_URL_TOKEN:
                 $url = $event['request']->getUrl();
                 $url .= (false === strpos($url, '?') ? '?' : '&');
-                $url .= utf8_encode(http_build_query(array('token' => $this->tokenOrLogin), '', '&'));
+                $url .= utf8_encode(http_build_query(array('token' => $this->token), '', '&'));
 
                 $event['request']->setUrl($url);
                 break;
