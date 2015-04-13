@@ -24,7 +24,7 @@ class Client
      * @param null|HttpClientInterface $httpClient Server Density http client
      */
     public function __construct(HttpClientInterface $httpClient = null) {
-        $this->httpClient = $httClient;
+        $this->httpClient = $httpClient;
     }
 
     private $options = array(
