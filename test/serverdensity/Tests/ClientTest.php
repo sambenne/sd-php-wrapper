@@ -46,10 +46,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function getAuthenticationFullData()
     {
         return array(
-            array('login', 'password', Client::AUTH_HTTP_PASSWORD),
-            array('token', null, Client::AUTH_HTTP_TOKEN),
             array('token', null, Client::AUTH_URL_TOKEN),
-            array('client_id', 'client_secret', Client::AUTH_URL_CLIENT_ID),
         );
     }
 
@@ -71,7 +68,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function getAuthenticationPartialData()
     {
         return array(
-            array('token', Client::AUTH_HTTP_TOKEN),
             array('token', Client::AUTH_URL_TOKEN),
         );
     }
@@ -162,42 +158,42 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             array('user', 'serverdensity\Api\User'),
             array('users', 'serverdensity\Api\User'),
 
-            array('me', 'serverdensity\Api\CurrentUser'),
-            array('current_user', 'serverdensity\Api\CurrentUser'),
-            array('currentUser', 'serverdensity\Api\CurrentUser'),
+            // array('me', 'serverdensity\Api\CurrentUser'),
+            // array('current_user', 'serverdensity\Api\CurrentUser'),
+            // array('currentUser', 'serverdensity\Api\CurrentUser'),
 
-            array('git', 'serverdensity\Api\GitData'),
-            array('git_data', 'serverdensity\Api\GitData'),
-            array('gitData', 'serverdensity\Api\GitData'),
+            // array('git', 'serverdensity\Api\GitData'),
+            // array('git_data', 'serverdensity\Api\GitData'),
+            // array('gitData', 'serverdensity\Api\GitData'),
 
-            array('gist', 'serverdensity\Api\Gists'),
-            array('gists', 'serverdensity\Api\Gists'),
+            // array('gist', 'serverdensity\Api\Gists'),
+            // array('gists', 'serverdensity\Api\Gists'),
 
-            array('issue', 'serverdensity\Api\Issue'),
-            array('issues', 'serverdensity\Api\Issue'),
+            // array('issue', 'serverdensity\Api\Issue'),
+            // array('issues', 'serverdensity\Api\Issue'),
 
-            array('markdown', 'serverdensity\Api\Markdown'),
+            // array('markdown', 'serverdensity\Api\Markdown'),
 
-            array('organization', 'serverdensity\Api\Organization'),
-            array('organizations', 'serverdensity\Api\Organization'),
+            // array('organization', 'serverdensity\Api\Organization'),
+            // array('organizations', 'serverdensity\Api\Organization'),
 
-            array('repo', 'serverdensity\Api\Repo'),
-            array('repos', 'serverdensity\Api\Repo'),
-            array('repository', 'serverdensity\Api\Repo'),
-            array('repositories', 'serverdensity\Api\Repo'),
+            // array('repo', 'serverdensity\Api\Repo'),
+            // array('repos', 'serverdensity\Api\Repo'),
+            // array('repository', 'serverdensity\Api\Repo'),
+            // array('repositories', 'serverdensity\Api\Repo'),
 
-            array('search', 'serverdensity\Api\Search'),
+            // array('search', 'serverdensity\Api\Search'),
 
-            array('pr', 'serverdensity\Api\PullRequest'),
-            array('pullRequest', 'serverdensity\Api\PullRequest'),
-            array('pull_request', 'serverdensity\Api\PullRequest'),
-            array('pullRequests', 'serverdensity\Api\PullRequest'),
-            array('pull_requests', 'serverdensity\Api\PullRequest'),
+            // array('pr', 'serverdensity\Api\PullRequest'),
+            // array('pullRequest', 'serverdensity\Api\PullRequest'),
+            // array('pull_request', 'serverdensity\Api\PullRequest'),
+            // array('pullRequests', 'serverdensity\Api\PullRequest'),
+            // array('pull_requests', 'serverdensity\Api\PullRequest'),
 
-            array('authorization', 'serverdensity\Api\Authorizations'),
-            array('authorizations', 'serverdensity\Api\Authorizations'),
+            // array('authorization', 'serverdensity\Api\Authorizations'),
+            // array('authorizations', 'serverdensity\Api\Authorizations'),
 
-            array('meta', 'serverdensity\Api\Meta')
+            // array('meta', 'serverdensity\Api\Meta')
         );
     }
 
