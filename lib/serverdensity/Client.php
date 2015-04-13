@@ -2,9 +2,10 @@
 
 namespace serverdensity;
 
-use serverdensity\InvalidArgumentException;
-use serverdensity\HttpClient;
-use serverdensity\HttpClientInterface;
+use serverdensity\Exception\InvalidArgumentException;
+use serverdensity\Exception\BadMethodCallException;
+use serverdensity\HttpClient\HttpClient;
+use serverdensity\HttpClient\HttpClientInterface;
 
 class Client
 {
@@ -78,10 +79,16 @@ class Client
         $this->getHttpClient()->clearHeaders();
     }
 
-    public getOption($name)
+    public function getOption($name)
     {
         if (!array_key_exists($name, $this->options)) {
-            if (!array_key_exists($name, $this->getHttpClient()->options))
+            if (!array_key_exists($name, $this->getHttpClient()->options)){
+                throw new InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
+            } else {
+                return $this->getHttpClient()->options[$name];
+            }
+        } else {
+            return $this->options[$name];
         }
     }
 
