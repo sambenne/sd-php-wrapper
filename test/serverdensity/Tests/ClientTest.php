@@ -32,21 +32,21 @@ class ClientTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider getAuthenticationFullData
      */
-    public function shouldAuthenticateUsingAllGivenParameters($login, $password, $method)
+    public function shouldAuthenticateUsingAllGivenParameters($login, $method)
     {
         $httpClient = $this->getHttpClientMock();
         $httpClient->expects($this->once())
             ->method('authenticate')
-            ->with($login, $password, $method);
+            ->with($login, $method);
 
         $client = new Client($httpClient);
-        $client->authenticate($login, $password, $method);
+        $client->authenticate($login, $method);
     }
 
     public function getAuthenticationFullData()
     {
         return array(
-            array('token', null, Client::AUTH_URL_TOKEN),
+            array('token', Client::AUTH_URL_TOKEN),
         );
     }
 
@@ -59,7 +59,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $httpClient = $this->getHttpClientMock();
         $httpClient->expects($this->once())
             ->method('authenticate')
-            ->with($token, null, $method);
+            ->with($token, $method);
 
         $client = new Client($httpClient);
         $client->authenticate($token, $method);
@@ -70,18 +70,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         return array(
             array('token', Client::AUTH_URL_TOKEN),
         );
-    }
-
-    /**
-     * @test
-     * @expectedException InvalidArgumentException
-     */
-    public function shouldThrowExceptionWhenAuthenticatingWithoutMethodSet()
-    {
-        $httpClient = $this->getHttpClientMock(array('addListener'));
-
-        $client = new Client($httpClient);
-        $client->authenticate('login', null, null);
     }
 
     /**
