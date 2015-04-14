@@ -14,7 +14,7 @@ class AuthListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldHaveKnownMethodName()
     {
-        $listener = new AuthListener('test', null, 'unknown');
+        $listener = new AuthListener('test', 'unknown');
         $listener->onRequestBeforeSend($this->getEventMock());
     }
 
@@ -31,7 +31,7 @@ class AuthListenerTest extends \PHPUnit_Framework_TestCase
         $request->expects($this->never())
             ->method('getUrl');
 
-        $listener = new AuthListener('test', 'pass', null);
+        $listener = new AuthListener('test', null);
         $listener->onRequestBeforeSend($this->getEventMock($request));
     }
 
@@ -42,7 +42,7 @@ class AuthListenerTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request('GET', '/res');
 
-        $listener = new AuthListener('test', null, Client::AUTH_URL_TOKEN);
+        $listener = new AuthListener('test', Client::AUTH_URL_TOKEN);
         $listener->onRequestBeforeSend($this->getEventMock($request));
 
         $this->assertEquals('/res?token=test', $request->getUrl());
