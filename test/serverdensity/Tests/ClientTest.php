@@ -143,8 +143,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function getApiClassesProvider()
     {
         return array(
-            array('user', 'serverdensity\Api\User'),
-            array('users', 'serverdensity\Api\User'),
+            array('user', 'serverdensity\Api\Users'),
+            array('users', 'serverdensity\Api\Users'),
 
             // array('me', 'serverdensity\Api\CurrentUser'),
             // array('current_user', 'serverdensity\Api\CurrentUser'),
