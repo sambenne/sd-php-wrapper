@@ -39,6 +39,11 @@ class Client
                 $api = new Api\Users($this);
                 break;
 
+            case 'tags':
+            case 'tag':
+                $api = new Api\Tags($this);
+                break;
+
             default:
                 throw new InvalidArgumentException(sprintf('Undefined api instance called: "%s"', $name));
         }
