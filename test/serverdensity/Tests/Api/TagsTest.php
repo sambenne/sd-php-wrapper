@@ -15,7 +15,7 @@ class TagsTest extends TestCase
     public function shouldGetTag(){
         $expectedArray = array('_id' => '1', 'name' => 'myTag');
 
-        $api = $this->getApiMock();
+        $api = $this->getApiMock('tags');
         $api->expects($this->once())
             ->method('get')
             ->with('inventory/tags/1')
@@ -33,7 +33,7 @@ class TagsTest extends TestCase
             array('_id' => '2', 'name' => 'myTag2')
         );
 
-        $api = $this->getApiMock();
+        $api = $this->getApiMock('tags');
         $api->expects($this->once())
             ->method('get')
             ->with('inventory/tags/')
@@ -48,7 +48,7 @@ class TagsTest extends TestCase
     public function shouldDeleteTag(){
         $expectedArray = array('_id' => '1', 'name' => 'myTag');
 
-        $api = $this->getApiMock();
+        $api = $this->getApiMock('tags');
         $api->expects($this->once())
             ->method('delete')
             ->with('inventory/tags/1')
@@ -70,7 +70,7 @@ class TagsTest extends TestCase
 
         $found = array('_id' => '1', 'name' => 'myTag');
 
-        $api = $this->getApiMock();
+        $api = $this->getApiMock('tags');
         $api->expects($this->once())
             ->method('get')
             ->with('inventory/tags/')
@@ -91,7 +91,7 @@ class TagsTest extends TestCase
 
         $emptyArray = array();
 
-        $api = $this->getApiMock();
+        $api = $this->getApiMock('tags');
         $api->expects($this->once())
             ->method('get')
             ->with('inventory/tags/')
@@ -107,7 +107,7 @@ class TagsTest extends TestCase
     public function shouldCreateTag(){
         $expectedArray = array('_id' => '1', 'name' => 'myTag');
 
-        $api = $this->getApiMock();
+        $api = $this->getApiMock('tags');
         $api->expects($this->once())
             ->method('post')
             ->with('inventory/tags/')
@@ -123,7 +123,7 @@ class TagsTest extends TestCase
         $expectedArray = array('_id' => '1', 'name' => 'newName');
         $update = array('name' => 'newName');
 
-        $api = $this->getApiMock();
+        $api = $this->getApiMock('tags');
         $api->expects($this->once())
             ->method('put')
             ->with('inventory/tags/1')

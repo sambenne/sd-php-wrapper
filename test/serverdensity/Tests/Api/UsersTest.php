@@ -16,7 +16,7 @@ class UsersTest extends TestCase
     {
         $expectedArray = array('_id' => '1', 'username' => 'Joe');
 
-        $api = $this->getApiMock();
+        $api = $this->getApiMock('users');
         $api->expects($this->once())
             ->method('get')
             ->with('users/users/1')
@@ -34,7 +34,7 @@ class UsersTest extends TestCase
             array('_id' => '2', 'username' => 'Joe2')
         );
 
-        $api = $this->getApiMock();
+        $api = $this->getApiMock('users');
         $api->expects($this->once())
             ->method('get')
             ->with('users/users/')
@@ -49,7 +49,7 @@ class UsersTest extends TestCase
     public function shouldDeleteUser(){
         $expectedArray = array('_id' => '1');
 
-        $api = $this->getApiMock();
+        $api = $this->getApiMock('users');
         $api->expects($this->once())
             ->method('delete')
             ->with('users/users/1')
@@ -67,7 +67,7 @@ class UsersTest extends TestCase
             'username' => 'Joe'
         );
 
-        $api = $this->getApiMock();
+        $api = $this->getApiMock('users');
         $api->expects($this->once())
             ->method('post')
             ->with('users/users/')
@@ -83,7 +83,7 @@ class UsersTest extends TestCase
         $expectedArray = array('_id' => '1', 'username' => 'Joe');
         $input = array('username' => 'Joe');
 
-        $api = $this->getApiMock();
+        $api = $this->getApiMock('users');
         $api->expects($this->once())
             ->method('put')
             ->with('users/users/1')

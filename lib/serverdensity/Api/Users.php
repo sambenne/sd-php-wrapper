@@ -5,7 +5,7 @@ namespace serverdensity\Api;
 class Users extends AbstractApi
 {
     /**
-    * Find user by ID
+    * View user by ID
     * @link     https://apidocs.serverdensity.com/#viewing-a-user
     * @param    string  $id the id of the user.
     * @return   an array that is the user.
