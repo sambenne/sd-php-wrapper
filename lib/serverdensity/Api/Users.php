@@ -10,7 +10,7 @@ class Users extends AbstractApi
     * @param    string  $id the id of the user.
     * @return   an array that is the user.
     */
-    public function getUser($id){
+    public function view($id){
         return $this->get('users/users/'.rawurlencode($id));
     }
 
@@ -29,9 +29,9 @@ class Users extends AbstractApi
     * @param    string $id the id of the user
     * @return   an array with the user that got deleted
     */
-    public function deleteUser($id)
+    public function destroy($id)
     {
-        return $this->delete('users/users/'.rawurldecode($id));
+        return $this->delete('users/users/'.rawurlencode($id));
     }
 
     /**
@@ -40,7 +40,7 @@ class Users extends AbstractApi
     * @param    array $user
     * @return   an array with the user that got created
     */
-    public function createUser(array $user)
+    public function create(array $user)
     {
         return $this->post('users/users/', $user);
     }
@@ -48,11 +48,12 @@ class Users extends AbstractApi
     /**
     * Update a user
     * @link     https://apidocs.serverdensity.com/#updating-a-user
+    * @param    string $id
     * @param    array $fields
     * @return   an array with the fields that got updated plus when it got updated
     */
-    public function updateUser($fields)
+    public function update($id, $fields)
     {
-        return $this->put('users/users/', $fields);
+        return $this->put('users/users/'.rawurlencode($id), $fields);
     }
 }

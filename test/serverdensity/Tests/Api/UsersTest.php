@@ -22,7 +22,7 @@ class UsersTest extends TestCase
             ->with('users/users/1')
             ->will($this->returnValue($expectedArray));
 
-        $this->assertEquals($expectedArray, $api->getUser('1'));
+        $this->assertEquals($expectedArray, $api->view('1'));
     }
 
     /**
@@ -55,7 +55,7 @@ class UsersTest extends TestCase
             ->with('users/users/1')
             ->will($this->returnValue($expectedArray));
 
-        $this->assertEquals($expectedArray, $api->deleteUser('1'));
+        $this->assertEquals($expectedArray, $api->destroy('1'));
     }
 
     /**
@@ -73,7 +73,7 @@ class UsersTest extends TestCase
             ->with('users/users/')
             ->will($this->returnValue($expectedArray));
 
-        $this->assertEquals($expectedArray, $api->createUser($expectedArray));
+        $this->assertEquals($expectedArray, $api->create($expectedArray));
     }
 
     /**
@@ -86,9 +86,9 @@ class UsersTest extends TestCase
         $api = $this->getApiMock();
         $api->expects($this->once())
             ->method('put')
-            ->with('users/users/')
+            ->with('users/users/1')
             ->will($this->returnValue($expectedArray));
 
-        $this->assertEquals($expectedArray, $api->updateUser($input));
+        $this->assertEquals($expectedArray, $api->update('1', $input));
     }
 }
