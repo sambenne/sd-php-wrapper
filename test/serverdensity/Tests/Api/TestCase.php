@@ -10,9 +10,8 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
     /**
     * @param    string  the class used by ApiMock
-    * @throws   InvalidArgumentException when class is wrong
+    * @throws   InvalidArgumentException when class is doesn't exist
     */
-
     protected function getApiMock($class)
     {
         $httpClient = $this->getMock('Guzzle\Http\Client', array('send'));
