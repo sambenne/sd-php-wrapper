@@ -1,0 +1,75 @@
+<?php
+
+namespace serverdensity\Api;
+
+class Services extends AbstractApi
+{
+
+    /**
+    * Create a service
+    * @link     https://apidocs.serverdensity.com/?python#creating-a-service
+    * @param    array  $service with all it's attributes.
+    * @return   an array that is the device.
+    */
+    public function create($service){
+        return $this->post('inventory/services/', $service);
+    }
+
+    /**
+    * Delete a service
+    * @link     https://apidocs.serverdensity.com/?python#deleting-a-service
+    * @param    string  $id     the id of the service
+    * @return   an array that is the service id.
+    */
+    public function destroy($id){
+        return $this->delete('inventory/services/'.rawurlencode($id));
+    }
+
+    /**
+    * List all services
+    * @link     https://apidocs.serverdensity.com/?python#listing-services
+    * @return   an array of arrays with all services.
+    */
+    public function all(){
+        return $this->get('inventory/services/');
+    }
+
+    /**
+    * Search a service
+    * @link     https://apidocs.serverdensity.com/?python#searching-for-a-service
+    * @param    array   $filter     an array of arrays of fields to filter on
+    * @param    array   $fields     an array of fields to keep in search
+    * @return   an array of arrays with all services.
+    */
+    public function search($filter, $fields){
+        $param = array(
+            'filter' => json_encode($filter),
+            'fields' => json_encode($fields)
+        );
+
+        return $this->get('inventory/resources/', $param);
+    }
+
+    /**
+    * List all services
+    * @link     https://apidocs.serverdensity.com/?python#updating-a-service
+    * @param    string  $id     id of the device to change
+    * @param    array   $fields an array of array of fields that you want to change
+    * @return   an array of arrays with all services.
+    */
+    public function update($id, $fields){
+        return $this->put('inventory/services/'.rawurlencode($id), $fields);
+    }
+
+    /**
+    * View service by ID
+    * @link     https://apidocs.serverdensity.com/?python#updating-a-service
+    * @param    $id     an id of the service
+    * @return   an array of arrays with all services.
+    */
+    public function view($id){
+        return $this->get('inventory/services/'.rawurlencode($id));
+    }
+
+
+}
