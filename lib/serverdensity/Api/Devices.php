@@ -6,11 +6,6 @@ class Devices extends AbstractApi
 {
 
 
-
-
-
-
-
     /**
     * View device by ID
     * @link     https://apidocs.serverdensity.com/?shell#view-device-by-id
