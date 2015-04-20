@@ -54,6 +54,11 @@ class Client
                 $api = new Api\Services($this);
                 break;
 
+            case 'alerts':
+            case 'alert':
+                $api = new Api\Alerts($this);
+                break;
+
             default:
                 throw new InvalidArgumentException(sprintf('Undefined api instance called: "%s"', $name));
         }
