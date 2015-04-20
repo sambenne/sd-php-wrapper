@@ -25,7 +25,7 @@ class Devices extends AbstractApi
     }
 
     /**
-    * Delete device by ID
+    * Get all devices
     * @link     https://apidocs.serverdensity.com/?shell#listing-all-devices
     * @return   an array of arrays with devices.
     */
