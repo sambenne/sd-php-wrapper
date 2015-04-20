@@ -7,7 +7,7 @@ class Devices extends AbstractApi
     /**
     * Create a device
     * @link     https://apidocs.serverdensity.com/?shell#creating-a-device
-    * @param    array  $id the id of the device.
+    * @param    array  $device with all its attributes.
     * @return   an array that is the device.
     */
     public function create($device){
@@ -52,11 +52,12 @@ class Devices extends AbstractApi
     /**
     * Update device by ID
     * @link     https://apidocs.serverdensity.com/?python#updating-a-device
-    * @param    string  $id     an id of the device
+    * @param    string  $id         an id of the device
+    * @param    array   $fields     an array of fields that is to be updated
     * @return   an array of arrays with devices.
     */
-    public function update($id){
-        return $this->put('inventory/devices/'.rawurlencode($id));
+    public function update($id, $fields){
+        return $this->put('inventory/devices/'.rawurlencode($id), $fields);
     }
 
     /**

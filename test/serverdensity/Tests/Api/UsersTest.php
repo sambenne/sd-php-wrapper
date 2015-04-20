@@ -81,14 +81,14 @@ class UsersTest extends TestCase
     */
     public function shouldUpdateUser(){
         $expectedArray = array('_id' => '1', 'username' => 'Joe');
-        $input = array('username' => 'Joe');
+        $change = array('username' => 'Joe');
 
         $api = $this->getApiMock('users');
         $api->expects($this->once())
             ->method('put')
-            ->with('users/users/1')
+            ->with('users/users/1', $change)
             ->will($this->returnValue($expectedArray));
 
-        $this->assertEquals($expectedArray, $api->update('1', $input));
+        $this->assertEquals($expectedArray, $api->update('1', $change));
     }
 }

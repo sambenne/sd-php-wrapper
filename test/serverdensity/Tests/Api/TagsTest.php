@@ -126,10 +126,10 @@ class TagsTest extends TestCase
         $api = $this->getApiMock('tags');
         $api->expects($this->once())
             ->method('put')
-            ->with('inventory/tags/1')
+            ->with('inventory/tags/1', $update)
             ->will($this->returnValue($expectedArray));
 
-        $this->assertEquals($expectedArray, $api->update('1', $expectedArray));
+        $this->assertEquals($expectedArray, $api->update('1', $update));
     }
 }
 

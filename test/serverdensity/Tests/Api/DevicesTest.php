@@ -105,14 +105,16 @@ class DevicesTest extends TestCase
     public function shouldUpdateDevice(){
         $expectedArray = array('_id' => '1', 'name' => 'myDevice');
 
+        $change = array('name' => 'myDevice');
+
         $api = $this->getApiMock('devices');
 
         $api->expects($this->once())
             ->method('put')
-            ->with('inventory/devices/1')
+            ->with('inventory/devices/1', $change)
             ->will($this->returnValue($expectedArray));
 
-        $this->assertEquals($expectedArray, $api->update('1'));
+        $this->assertEquals($expectedArray, $api->update('1', $change));
     }
 
     /**
