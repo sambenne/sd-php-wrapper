@@ -1,9 +1,9 @@
 {
-    "name": "serverdensity/SD-api",
+    "name": "serverdensity/SD-api-wrapper",
     "type": "library",
-    "description": "Server Density API v2 client",
+    "description": "A php wrapper for the Server Density API v2",
     "homepage": "https://github.com/serverdensity/php-serverdensity-api",
-    "keywords": ["serverdensity", "sd", "api", "php"],
+    "keywords": ["serverdensity", "sd", "api", "php", "wrapper"],
     "license": "MIT",
     "authors": [
         {

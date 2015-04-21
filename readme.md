@@ -5,3 +5,6 @@ Download composer
 
 Then install the dependencies
 `php composer.phar install`
+
+To run the tests run the following command in the terminal
+`vendor/phpunit/phpunit/phpunit test`
