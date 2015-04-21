@@ -1,5 +1,5 @@
 {
-    "name": "serverdensity/SD-api-wrapper",
+    "name": "serverdensity/sd-api-wrapper",
     "type": "library",
     "description": "A php wrapper for the Server Density API v2",
     "homepage": "https://github.com/serverdensity/php-serverdensity-api",
