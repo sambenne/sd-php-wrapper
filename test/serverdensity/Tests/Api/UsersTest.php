@@ -51,11 +51,11 @@ class UsersTest extends TestCase
 
         $api = $this->getApiMock('users');
         $api->expects($this->once())
-            ->method('delete')
+            ->method('HTTPdelete')
             ->with('users/users/1')
             ->will($this->returnValue($expectedArray));
 
-        $this->assertEquals($expectedArray, $api->destroy('1'));
+        $this->assertEquals($expectedArray, $api->delete('1'));
     }
 
     /**

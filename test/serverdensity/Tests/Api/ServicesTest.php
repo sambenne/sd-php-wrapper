@@ -45,11 +45,11 @@ class ServicesTest extends TestCase
 
         $api = $this->getApiMock('services');
         $api->expects($this->once())
-            ->method('delete')
+            ->method('HTTPdelete')
             ->with('inventory/services/1')
             ->will($this->returnValue($expectedArray));
 
-        $this->assertEquals($expectedArray, $api->destroy('1'));
+        $this->assertEquals($expectedArray, $api->delete('1'));
     }
 
     /**

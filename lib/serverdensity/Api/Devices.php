@@ -21,8 +21,8 @@ class Devices extends AbstractApi
     * @param    string  $id the id of the device.
     * @return   an array with the device id that got deleted.
     */
-    public function destroy($id){
-        return $this->delete('inventory/devices/'.rawurlencode($id));
+    public function delete($id){
+        return $this->HTTPdelete('inventory/devices/'.rawurlencode($id));
     }
 
     /**

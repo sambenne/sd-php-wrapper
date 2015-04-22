@@ -22,8 +22,8 @@ class Services extends AbstractApi
     * @param    string  $id     the id of the service
     * @return   an array that is the service id.
     */
-    public function destroy($id){
-        return $this->delete('inventory/services/'.rawurlencode($id));
+    public function delete($id){
+        return $this->HTTPdelete('inventory/services/'.rawurlencode($id));
     }
 
     /**

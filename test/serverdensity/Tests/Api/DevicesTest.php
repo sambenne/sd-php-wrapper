@@ -46,11 +46,11 @@ class DevicesTest extends TestCase
 
         $api = $this->getApiMock('devices');
         $api->expects($this->once())
-            ->method('delete')
+            ->method('HTTPdelete')
             ->with('inventory/devices/1')
             ->will($this->returnValue($expectedArray));
 
-        $this->assertEquals($expectedArray, $api->destroy('1'));
+        $this->assertEquals($expectedArray, $api->delete('1'));
 
     }
 

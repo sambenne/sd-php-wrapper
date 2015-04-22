@@ -34,9 +34,9 @@ class Tags extends AbstractApi
     * @param    string $id the id of the tag
     * @return   an array with the id of the tag that got deleted
     */
-    public function destroy($id)
+    public function delete($id)
     {
-        return $this->delete('inventory/tags/'.rawurlencode($id));
+        return $this->HTTPdelete('inventory/tags/'.rawurlencode($id));
     }
 
     /**

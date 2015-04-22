@@ -29,9 +29,9 @@ class Users extends AbstractApi
     * @param    string $id the id of the user
     * @return   an array with the user that got deleted
     */
-    public function destroy($id)
+    public function delete($id)
     {
-        return $this->delete('users/users/'.rawurlencode($id));
+        return $this->HTTPdelete('users/users/'.rawurlencode($id));
     }
 
     /**

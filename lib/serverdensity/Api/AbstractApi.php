@@ -105,7 +105,7 @@ abstract class AbstractApi {
     * @param array  $parameters     POST parameters to be json encoded
     * @param array  $requestHeaders Request headers
     */
-    protected function delete($path, array $parameters = array(), $requestHeaders = array())
+    protected function HTTPdelete($path, array $parameters = array(), $requestHeaders = array())
     {
         $response = $this->client->getHttpClient()->delete(
             $path,
