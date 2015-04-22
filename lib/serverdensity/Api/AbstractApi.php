@@ -115,4 +115,18 @@ abstract class AbstractApi {
 
         return ResponseMediator::getContent($response);
     }
+
+    /**
+    * If a value contains an array json encode that value
+    * @param array  $array  checking the following array
+    */
+    protected function makeJsonReady($array)
+    {
+        foreach($array as $key => $val){
+            if (is_array($val)){
+                $array[$key] = json_encode($val);
+            }
+        }
+        return $array;
+    }
 }

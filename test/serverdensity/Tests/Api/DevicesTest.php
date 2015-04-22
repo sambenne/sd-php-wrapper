@@ -13,18 +13,29 @@ class DevicesTest extends TestCase
     * @test
     */
     public function shouldCreateUser(){
+        $input = array(
+            '_id' => '1',
+            'name' => 'myDevice',
+            'publicIps' => array(
+                "192.151.21.1"
+            )
+        );
+
         $expectedArray = array(
             '_id' => '1',
-            'name' => 'myDevice'
+            'name' => 'myDevice',
+            'publicIps' => json_encode(array(
+                "192.151.21.1"
+            ))
         );
 
         $api = $this->getApiMock('devices');
         $api->expects($this->once())
             ->method('post')
-            ->with('inventory/devices/')
+            ->with('inventory/devices/', $expectedArray)
             ->will($this->returnValue($expectedArray));
 
-        $this->assertEquals($expectedArray, $api->create($expectedArray));
+        $this->assertEquals($expectedArray, $api->create($input));
     }
 
     /**
@@ -103,15 +114,25 @@ class DevicesTest extends TestCase
     * @test
     */
     public function shouldUpdateDevice(){
-        $expectedArray = array('_id' => '1', 'name' => 'myDevice');
+        $change = array(
+            'name' => 'myDevice',
+            'publicIPs' => array(
+                '182.231.1.1'
+            )
+        );
 
-        $change = array('name' => 'myDevice');
+        $expectedArray = array(
+            'name' => 'myDevice',
+            'publicIPs' => json_encode(array(
+                '182.231.1.1'
+            ))
+        );
 
         $api = $this->getApiMock('devices');
 
         $api->expects($this->once())
             ->method('put')
-            ->with('inventory/devices/1', $change)
+            ->with('inventory/devices/1', $expectedArray)
             ->will($this->returnValue($expectedArray));
 
         $this->assertEquals($expectedArray, $api->update('1', $change));

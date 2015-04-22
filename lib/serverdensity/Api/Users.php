@@ -42,6 +42,7 @@ class Users extends AbstractApi
     */
     public function create(array $user)
     {
+        $user = $this->makeJsonReady($user);
         return $this->post('users/users/', $user);
     }
 
@@ -54,6 +55,7 @@ class Users extends AbstractApi
     */
     public function update($id, $fields)
     {
+        $fields = $this->makeJsonReady($fields);
         return $this->put('users/users/'.rawurlencode($id), $fields);
     }
 }

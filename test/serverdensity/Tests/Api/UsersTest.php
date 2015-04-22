@@ -62,31 +62,55 @@ class UsersTest extends TestCase
     * @test
     */
     public function shouldCreateUser(){
+        $input = array(
+            '_id' => '1',
+            'username' => 'Joe',
+            'phoneNumbers' => array(
+                '+425234235'
+            )
+        );
+
         $expectedArray = array(
             '_id' => '1',
-            'username' => 'Joe'
+            'username' => 'Joe',
+            'phoneNumbers' => json_encode(array(
+                '+425234235'
+            ))
         );
 
         $api = $this->getApiMock('users');
         $api->expects($this->once())
             ->method('post')
-            ->with('users/users/')
+            ->with('users/users/', $expectedArray)
             ->will($this->returnValue($expectedArray));
 
-        $this->assertEquals($expectedArray, $api->create($expectedArray));
+        $this->assertEquals($expectedArray, $api->create($input));
     }
 
     /**
     * @test
     */
     public function shouldUpdateUser(){
-        $expectedArray = array('_id' => '1', 'username' => 'Joe');
-        $change = array('username' => 'Joe');
+        $change = array(
+            '_id' => '1',
+            'username' => 'Joe',
+            'phoneNumbers' => array(
+                '+324132124'
+            )
+        );
+
+        $expectedArray = array(
+            '_id' => '1',
+            'username' => 'Joe',
+            'phoneNumbers' => json_encode(array(
+                '+324132124'
+            ))
+        );
 
         $api = $this->getApiMock('users');
         $api->expects($this->once())
             ->method('put')
-            ->with('users/users/1', $change)
+            ->with('users/users/1', $expectedArray)
             ->will($this->returnValue($expectedArray));
 
         $this->assertEquals($expectedArray, $api->update('1', $change));

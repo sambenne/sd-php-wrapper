@@ -91,12 +91,12 @@ class Alerts extends AbstractApi
     /**
     * Get triggered alerts
     * @link     https://apidocs.serverdensity.com/#triggered-alerts
-    * @param    string  $closed         whether alert is closed or open
+    * @param    bool    $closed         whether alert is closed or open
     * @param    string  $subjectType    the subjecttype to filter on
     * @param    string  $subjectId      optional subjectID to filter on.
     * @return   an array of arrays with devices.
     */
-    public function triggered(bool $closed, $subjectType, $subjectId=''){
+    public function triggered($closed, $subjectType, $subjectId=''){
         $fields = array(
             'closed' => $closed,
             'subjectType' => $subjectType

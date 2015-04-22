@@ -11,6 +11,7 @@ class Devices extends AbstractApi
     * @return   an array that is the device.
     */
     public function create($device){
+        $device = $this->makeJsonReady($device);
         return $this->post('inventory/devices/', $device);
     }
 
@@ -57,6 +58,7 @@ class Devices extends AbstractApi
     * @return   an array of arrays with devices.
     */
     public function update($id, $fields){
+        $fields = $this->makeJsonReady($fields);
         return $this->put('inventory/devices/'.rawurlencode($id), $fields);
     }
 

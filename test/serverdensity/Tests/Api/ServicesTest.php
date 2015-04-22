@@ -12,7 +12,21 @@ class ServicesTest extends TestCase
     * @test
     */
     public function shouldCreateService(){
-        $expectedArray = array('_id' => '1', 'name' => 'myService');
+        $input = array(
+            '_id' => '1',
+            'name' => 'myService',
+            'checkLocations' => array(
+                'dub'
+            )
+        );
+
+        $expectedArray = array(
+            '_id' => '1',
+            'name' => 'myService',
+            'checkLocations' => json_encode(array(
+                'dub'
+            ))
+        );
 
         $api = $this->getApiMock('services');
         $api->expects($this->once())
@@ -20,7 +34,7 @@ class ServicesTest extends TestCase
             ->with('inventory/services/', $expectedArray)
             ->will($this->returnValue($expectedArray));
 
-        $this->assertEquals($expectedArray, $api->create($expectedArray));
+        $this->assertEquals($expectedArray, $api->create($input));
     }
 
     /**
@@ -93,14 +107,26 @@ class ServicesTest extends TestCase
     * @test
     */
     public function shouldUpdateService(){
-        $expectedArray = array('_id' => '1', 'name' => 'myService');
+        $change = array(
+            '_id' => '1',
+            'name' => 'myService',
+            'checkLocations' => array(
+                'dub'
+            )
+        );
 
-        $change = array('name' => 'myService');
+        $expectedArray = array(
+            '_id' => '1',
+            'name' => 'myService',
+            'checkLocations' => json_encode(array(
+                'dub'
+            ))
+        );
 
         $api = $this->getApiMock('services');
         $api->expects($this->once())
             ->method('put')
-            ->with('inventory/services/1', $change)
+            ->with('inventory/services/1', $expectedArray)
             ->will($this->returnValue($expectedArray));
 
         $this->assertEquals($expectedArray, $api->update('1', $change));

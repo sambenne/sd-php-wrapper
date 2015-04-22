@@ -12,6 +12,7 @@ class Services extends AbstractApi
     * @return   an array that is the device.
     */
     public function create($service){
+        $service = $this->makeJsonReady($service);
         return $this->post('inventory/services/', $service);
     }
 
@@ -58,6 +59,7 @@ class Services extends AbstractApi
     * @return   an array of arrays with all services.
     */
     public function update($id, $fields){
+        $fields = $this->makeJsonReady($fields);
         return $this->put('inventory/services/'.rawurlencode($id), $fields);
     }
 
