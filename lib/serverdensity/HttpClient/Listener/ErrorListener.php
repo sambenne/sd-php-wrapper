@@ -4,20 +4,17 @@ namespace serverdensity\HttpClient\Listener;
 
 use serverdensity\Exception\TwoFactorAuthenticationRequiredException;
 use serverdensity\HttpClient\Message\ResponseMediator;
-use Guzzle\Common\Event;
 use serverdensity\Exception\ApiLimitExceedException;
 use serverdensity\Exception\ErrorException;
 use serverdensity\Exception\RuntimeException;
 use serverdensity\Exception\ValidationFailedException;
 
 use GuzzleHttp\Message\Response;
-use GuzzleHttp\Event\EmitterInterface;
-use GuzzleHttp\Event\SubscriberInterface;
 use GuzzleHttp\Event\ErrorEvent;
 
 /**
  * @author Joseph Bielawski <stloyd@gmail.com>
- */ // change name to subscriber...
+ */
 class ErrorListener
 {
     /**
