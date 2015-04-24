@@ -2,12 +2,14 @@
 
 namespace serverdensity\HttpClient\Message;
 
-use Guzzle\Http\Message\Response;
 use serverdensity\Exception\ApiLimitExceedException;
 
 class ResponseMediator
 {
-    public static function getContent(Response $response)
+    /**
+    * @param response is of type GuzzleHttp\Message\Response;
+    */
+    public static function getContent($response)
     {
         $body    = $response->getBody(true);
         $content = json_decode($body, true);
@@ -19,7 +21,7 @@ class ResponseMediator
         return $content;
     }
 
-    public static function getApiLimit(Response $response)
+    public static function getApiLimit($response)
     {
         $remainingCalls = $response->getHeader('X-RateLimit-Remaining');
 

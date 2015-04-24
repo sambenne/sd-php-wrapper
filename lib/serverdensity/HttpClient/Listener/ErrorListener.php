@@ -5,15 +5,19 @@ namespace serverdensity\HttpClient\Listener;
 use serverdensity\Exception\TwoFactorAuthenticationRequiredException;
 use serverdensity\HttpClient\Message\ResponseMediator;
 use Guzzle\Common\Event;
-use Guzzle\Http\Message\Response;
 use serverdensity\Exception\ApiLimitExceedException;
 use serverdensity\Exception\ErrorException;
 use serverdensity\Exception\RuntimeException;
 use serverdensity\Exception\ValidationFailedException;
 
+use GuzzleHttp\Message\Response;
+use GuzzleHttp\Event\EmitterInterface;
+use GuzzleHttp\Event\SubscriberInterface;
+use GuzzleHttp\Event\ErrorEvent;
+
 /**
  * @author Joseph Bielawski <stloyd@gmail.com>
- */
+ */ // change name to subscriber...
 class ErrorListener
 {
     /**
@@ -32,13 +36,13 @@ class ErrorListener
     /**
      * {@inheritDoc}
      */
-    public function onRequestError(Event $event)
+    public function onRequestError(ErrorEvent $event)
     {
         /** @var $request \Guzzle\Http\Message\Request */
-        $request = $event['request'];
-        $response = $request->getResponse();
+        $request = $event->getRequest();
+        $response = $event->getResponse();
 
-        if ($response->isClientError() || $response->isServerError()) {
+        if ($this->isClientError($response) || $this->isServerError($response)) {
             $remaining = (string) $response->getHeader('X-RateLimit-Remaining');
 
             if (null != $remaining && 1 > $remaining && 'rate_limit' !== substr($request->getResource(), 1, 10)) {
@@ -82,5 +86,14 @@ class ErrorListener
 
             throw new RuntimeException(isset($content['message']) ? $content['message'] : $content, $response->getStatusCode());
         };
+    }
+
+    public function isClientError($response){
+        return $response->getStatusCode() >=400 && $response->getStatusCode() < 500;
+    }
+
+    public function isServerError($response)
+    {
+        return $response->getStatusCode() >= 500 && $response->getStatusCode() < 600;
     }
 }
