@@ -2,7 +2,7 @@
 
 namespace serverdensity\Tests\HttpClient;
 
-use Guzzle\Http\Message\Request;
+use GuzzleHttp\Message\Request;
 use serverdensity\Client;
 use serverdensity\HttpClient\Listener\AuthListener;
 
@@ -23,11 +23,8 @@ class AuthListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldDoNothingForHaveNullMethod()
     {
-        $request = $this->getMock('Guzzle\Http\Message\RequestInterface');
-        $request->expects($this->never())
-            ->method('addHeader');
-        $request->expects($this->never())
-            ->method('fromUrl');
+        $request = $this->getMock('GuzzleHttp\Message\RequestInterface');
+
         $request->expects($this->never())
             ->method('getUrl');
 
@@ -50,11 +47,13 @@ class AuthListenerTest extends \PHPUnit_Framework_TestCase
 
     private function getEventMock($request = null)
     {
-        $mock = $this->getMockBuilder('Guzzle\Common\Event')->getMock();
+        $mock = $this->getMockBuilder('GuzzleHttp\Event\BeforeEvent')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         if ($request) {
             $mock->expects($this->any())
-                ->method('offsetGet')
+                ->method('getRequest')
                 ->will($this->returnValue($request));
         }
 
