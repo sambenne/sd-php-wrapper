@@ -86,8 +86,12 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
         $client = $this->getBrowserMock();
 
+        $client->expects($this->once())
+            ->method('createRequest')
+            ->with('GET', $path, ['headers' => $headers, 'query' => $parameters]);
+
         $httpClient = new HttpClient(array(), $client);
-        $httpClient->get($path, $parameters, $headers);
+        $response = $httpClient->get($path, $parameters, $headers);
     }
 
     /**
@@ -96,13 +100,14 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
     public function shouldDoPOSTRequest()
     {
         $path       = '/some/path';
-        $body       = 'a = b';
+        $body       = 'somebody';
         $headers    = array('c' => 'd');
 
         $client = $this->getBrowserMock();
+
         $client->expects($this->once())
             ->method('createRequest')
-            ->with('POST', $path, $this->isType('array'), $body);
+            ->with('POST', $path, ['body' => $body, 'headers' => $headers]);
 
         $httpClient = new HttpClient(array(), $client);
         $httpClient->post($path, $body, $headers);
@@ -135,6 +140,10 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
         $client = $this->getBrowserMock();
 
+        $client->expects($this->once())
+            ->method('createRequest')
+            ->with('PATCH', $path, ['headers' => $headers, 'body' => $body]);
+
         $httpClient = new HttpClient(array(), $client);
         $httpClient->patch($path, $body, $headers);
     }
@@ -150,6 +159,10 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
         $client = $this->getBrowserMock();
 
+        $client->expects($this->once())
+            ->method('createRequest')
+            ->with('DELETE', $path, ['headers' => $headers, 'body' => $body]);
+
         $httpClient = new HttpClient(array(), $client);
         $httpClient->delete($path, $body, $headers);
     }
@@ -164,8 +177,12 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
         $client = $this->getBrowserMock();
 
+        $client->expects($this->once())
+            ->method('createRequest')
+            ->with('PUT', $path, ['headers' => $headers]);
+
         $httpClient = new HttpClient(array(), $client);
-        $httpClient->put($path, $headers);
+        $httpClient->put($path, null, $headers);
     }
 
     /**
@@ -175,12 +192,17 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
     {
         $path       = '/some/path';
         $body       = 'a = b';
-        $options    = array('c' => 'd');
+        $options    = array('someval' => 'd');
 
+        $expectedResult = array_merge($options, ['body' => $body, 'headers' => array()]);
         $client = $this->getBrowserMock();
 
+        $client->expects($this->once())
+            ->method('createRequest')
+            ->with('HEAD', $path, $expectedResult);
+
         $httpClient = new HttpClient(array(), $client);
-        $httpClient->request($path, $body, 'HEAD', $options);
+        $httpClient->request($path, $body, 'HEAD', [], $options);
     }
 
 
@@ -236,8 +258,16 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $httpClient->get($path, $parameters, $headers);
     }
 
-    protected function getBrowserMock(array $methods = array())
+    protected function getBrowserMock(array $methods = array(), array $args = array())
     {
+
+        $callMethods = array(
+            'GET',
+            'POST',
+            'PUT',
+            'DELETE',
+            'HEAD',
+        );
 
         $mock = $this->getMockBuilder('GuzzleHttp\Client')
             ->setMethods(array_merge(
@@ -253,10 +283,6 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setConstructorArgs(array('Get', 'some URL'))
             ->getMock();
-
-        $mockRequest->expects($this->any())
-            ->method('getEmitter')
-            ->will($this->returnValue($emitter));
 
         $subscriber = new Prepare();
         $emitter->attach($subscriber);

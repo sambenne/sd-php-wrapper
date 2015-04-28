@@ -14,15 +14,18 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     */
     protected function getApiMock($class)
     {
-        $httpClient = $this->getMock('Guzzle\Http\Client', array('send'));
-        $httpClient
-            ->expects($this->any())
-            ->method('send');
+
+        $httpClient = $this->getMockBuilder('GuzzleHttp\Client')
+            ->setMethods(['send'])
+            ->getMock();
 
         $client = new Client();
         $this->assertInstanceOf('serverdensity\Api\\'.ucwords($class), $client->api($class));
 
-        $mock = $this->getMock('serverdensity\HttpClient\HttpClient', array(), array(array(), $httpClient));
+        $mock = $this->getMockBuilder('serverdensity\HttpClient\HttpClient')
+            ->disableOriginalConstructor()
+            ->SetConstructorArgs([array(), $httpClient])
+            ->getMock();
 
         $client = new \serverdensity\Client($mock);
         $client->setHttpClient($mock);

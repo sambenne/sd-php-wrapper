@@ -28,10 +28,12 @@ class HttpClient implements HttpClientInterface
 
     protected $options = array(
         'base_url'    => 'https://api.serverdensity.io/',
+        'defaults'    => [
+            'headers' => ['user-agent' => 'SD-php-api']
 
-        'user_agent'  => 'SD-php-api (http://github.com/serverdensity/SD-php-api)',
+        ],
+
         'timeout'     => 10,
-
         'api_limit'   => 5000,
         'api_version' => 'v2',
     );
@@ -50,7 +52,7 @@ class HttpClient implements HttpClientInterface
     public function __construct(array $options = array(), ClientInterface $client = null)
     {
         $this->options = array_merge($this->options, $options);
-        $client = $client ?: new GuzzleClient($this->options['base_url'], $this->options);
+        $client = $client ?: new GuzzleClient($this->options);
         $this->client  = $client;
 
         $this->getEmitter()->on(
@@ -89,7 +91,7 @@ class HttpClient implements HttpClientInterface
     {
         $this->headers = array(
             'Accept' => sprintf('application/vnd.github.%s+json', $this->options['api_version']),
-            'User-Agent' => sprintf('%s', $this->options['user_agent']),
+            'User-Agent' => sprintf('%s', $this->options['defaults']['headers']['user-agent']),
         );
     }
 
@@ -100,10 +102,10 @@ class HttpClient implements HttpClientInterface
         // $this->client->getEventDispatcher()->addListener($eventName, $listener);
     }
 
-    public function addSubscriber(EventSubscriberInterface $subscriber)
-    {
-        $this->client->addSubscriber($subscriber);
-    }
+    // public function addSubscriber(EventSubscriberInterface $subscriber)
+    // {
+    //     $this->client->addSubscriber($subscriber);
+    // }
 
     /**
      * {@inheritDoc}
@@ -150,7 +152,12 @@ class HttpClient implements HttpClientInterface
      */
     public function request($path, $body = null, $httpMethod = 'GET', array $headers = array(), array $options = array())
     {
-        $request = $this->createRequest($httpMethod, $path, $body, $headers, $options);
+        if(!empty($body)){
+            $options = array_merge($options, ['body' => $body]);
+        }
+        $options = array_merge($options, ['headers' => $headers]);
+
+        $request = $this->createRequest($httpMethod, $path, $options);
 
         try {
             $response = $this->client->send($request);
@@ -202,13 +209,11 @@ class HttpClient implements HttpClientInterface
         return $this->lastResponse;
     }
 
-    protected function createRequest($httpMethod, $path, $body = null, array $headers = array(), array $options = array())
+    protected function createRequest($httpMethod, $path, array $options = array())
     {
         return $this->client->createRequest(
             $httpMethod,
             $path,
-            array_merge($this->headers, $headers),
-            $body,
             $options
         );
     }
