@@ -3,15 +3,19 @@
 namespace serverdensity\HttpClient;
 
 use serverdensity\Exception\TwoFactorAuthenticationRequiredException;
-use Guzzle\Http\Client as GuzzleClient;
-use Guzzle\Http\ClientInterface;
-use Guzzle\Http\Message\Request;
-use Guzzle\Http\Message\Response;
 use serverdensity\Exception\ErrorException;
 use serverdensity\Exception\RuntimeException;
 use serverdensity\HttpClient\Listener\AuthListener;
 use serverdensity\HttpClient\Listener\ErrorListener;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+use GuzzleHttp\Event\HasEmitterTrait;
+use GuzzleHttp\Event\BeforeEvent;
+use GuzzleHttp\Event\ErrorEvent;
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Message\Request;
+use GuzzleHttp\Message\Response;
+
 
 /**
  * Performs requests on Server Density API. API documentation should be self-explanatory.
@@ -20,6 +24,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class HttpClient implements HttpClientInterface
 {
+    use HasEmitterTrait;
+
     protected $options = array(
         'base_url'    => 'https://api.serverdensity.io/',
 
@@ -32,8 +38,10 @@ class HttpClient implements HttpClientInterface
 
     protected $headers = array();
 
+    // make option to hold the two classes for auth and errorlistener.
     private $lastResponse;
     private $lastRequest;
+    private $eventClasses = array();
 
     /**
      * @param array           $options
@@ -45,7 +53,16 @@ class HttpClient implements HttpClientInterface
         $client = $client ?: new GuzzleClient($this->options['base_url'], $this->options);
         $this->client  = $client;
 
-        $this->addListener('request.error', array(new ErrorListener($this->options), 'onRequestError'));
+        $this->getEmitter()->on(
+            'error', function (ErrorEvent $event){
+                $listener = new ErrorListener($this->options);
+                $listener->onRequestError($event);
+        });
+
+        // $this->getEmitter()->on(
+        //     'error', [new ErrorListener($this->options), 'onRequestError']);
+
+        // $this->addListener('error', array(new ErrorListener($this->options), 'onRequestError'));
         $this->clearHeaders();
     }
 
@@ -78,7 +95,9 @@ class HttpClient implements HttpClientInterface
 
     public function addListener($eventName, $listener)
     {
-        $this->client->getEventDispatcher()->addListener($eventName, $listener);
+        $emitter = $this->client->getEmitter();
+        $emitter->on($eventName, $listener);
+        // $this->client->getEventDispatcher()->addListener($eventName, $listener);
     }
 
     public function addSubscriber(EventSubscriberInterface $subscriber)
@@ -154,9 +173,17 @@ class HttpClient implements HttpClientInterface
      */
     public function authenticate($token, $method)
     {
-        $this->addListener('request.before_send', array(
-            new AuthListener($token, $method), 'onRequestBeforeSend'
-        ));
+        if(array_key_exists('AuthListener', $this->eventClasses)){
+            $authlistener = $this->eventClasses['AuthListener'];
+        } else {
+            $this->eventClasses['AuthListener'] = new AuthListener($token, $method);
+            $authlistener = $this->eventClasses['AuthListener'];
+        }
+
+        $this->getEmitter()->on(
+            'before', function (BeforeEvent $event, $authlistener){
+                $authlistener->onRequestBeforeSend($event);
+            });
     }
 
     /**

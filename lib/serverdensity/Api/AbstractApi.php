@@ -117,6 +117,18 @@ abstract class AbstractApi {
     }
 
     /**
+     * Create a JSON encoded version of an array of parameters.
+     *
+     * @param array $parameters Request parameters
+     *
+     * @return null|string
+     */
+    protected function createJsonBody(array $parameters)
+    {
+        return (count($parameters) === 0) ? null : json_encode($parameters, empty($parameters) ? JSON_FORCE_OBJECT : 0);
+    }
+
+    /**
     * If a value contains an array json encode that value
     * @param array  $array  checking the following array
     */
