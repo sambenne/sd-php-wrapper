@@ -43,7 +43,7 @@ abstract class AbstractApi {
     protected function post($path, array $parameters = array(), $requestHeaders = array()){
         return $this->postRaw(
             $path,
-            $this->createJsonBody($parameters),
+            $parameters,
             $requestHeaders
         );
     }
@@ -92,7 +92,7 @@ abstract class AbstractApi {
     protected function put($path, array $parameters = array(), $requestHeaders = array()){
         $response = $this->client->getHttpClient()->put(
             $path,
-            $this->createJsonBody($parameters),
+            $parameters,
             $requestHeaders
         );
 
@@ -109,7 +109,7 @@ abstract class AbstractApi {
     {
         $response = $this->client->getHttpClient()->delete(
             $path,
-            $this->createJsonBody($parameters),
+            $parameters,
             $requestHeaders
         );
 
