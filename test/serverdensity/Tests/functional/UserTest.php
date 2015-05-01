@@ -1,135 +1,159 @@
 <?php
 namespace serverdensity\Tests\functional;
 
-use Guzzle\Http\Client as GuzzleClient;
 use GuzzleHttp\Client as NewGuzzle;
-use GuzzleHttp\Exception\ClientException as NewExec;
-use Guzzle\Http\Exception\ClientErrorResponseException;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
+
+use serverdensity\Exception\RuntimeException;
+use serverdensity\HttpClient\HttpClient as HttpClient;
 
 /**
 * @group functional
 */
 class UserTest extends TestCase
 {
+    protected $user;
+
+    // /**
+    // * @depends shouldCreateUser
+    // */
+    // public static function tearDownAfterClass()
+    // {
+    //     print_r($this->user);
+    // }
+//
     /**
     * @test
     */
-    public function test(){
-        //codehere...
+    public function shouldGetErrorWhenEmptyFields(){
+
+        $this->setExpectedException('serverdensity\Exception\ValidationFailedException');
+        $createdUser = $this->client->api('users')->create(array());
+
+    }
+
+    /**
+    * @test
+    */
+    public function shouldCreateUser(){
+        $user = array(
+            "_id" => '1234567890',
+            "admin" => true,
+            "firstName" => "Llama",
+            "lastName" => "Hat",
+            "login" => "llama",
+            "password" => "password",
+            "emailAddresses" => array(
+                "llama@gmail.com"
+            ),
+            "phoneNumbers" => array(
+                "+342351412"
+            )
+        );
+
+        $createdUser = $this->client->api('users')->create($user);
+
+
+        $this->assertArrayHasKey('_id', $createdUser);
+        $this->assertArrayHasKey('firstName', $createdUser);
+        $this->assertArrayHasKey('lastName', $createdUser);
+        $this->assertArrayHasKey('phoneNumbers', $createdUser);
+
+        $this->user = $createdUser;
+
+        return $createdUser;
+    }
+
+    /**
+    * @test
+    * @depends shouldCreateUser
+    */
+    public function shouldGetErrorWhenDuplicatingUser(){
+        $user = array(
+            "_id" => '1234567890',
+            "admin" => true,
+            "firstName" => "Llama",
+            "lastName" => "Hat",
+            "login" => "llama",
+            "password" => "password",
+            "emailAddresses" => array(
+                "llama@gmail.com"
+            ),
+            "phoneNumbers" => array(
+                "+342351412"
+            )
+        );
+        $this->setExpectedException('serverdensity\Exception\ValidationFailedException');
+        $createdUser = $this->client->api('users')->create($user);
+
     }
 
 
-    // /**
-    // * @test
-    // */
-    // public function shouldCreateUser(){
-    //     $user = array(
-    //         "admin" => true,
-    //         "firstName" => "Llama",
-    //         "lastName" => "Hat",
-    //         "login" => "llama",
-    //         "password" => "password",
-    //         "emailAddresses" => array(
-    //             "llama@gmail.com"
-    //         ),
-    //         "phoneNumbers" => array(
-    //             "+342351412"
-    //         )
-    //     );
+    /**
+    * @test
+    * @depends shouldCreateUser
+    */
+    public function shouldViewUser($createdUser){
 
-    //     $createdUser = $this->client->api('users')->create($user);
-    //     $this->assertArrayHasKey('_id', $createdUser);
-    //     $this->assertArrayHasKey('firstName', $createdUser);
-    //     $this->assertArrayHasKey('lastName', $createdUser);
-    //     $this->assertArrayHasKey('phoneNumbers', $createdUser);
+        $result = $this->client->api('users')->view($createdUser['_id']);
 
-    //     echo $createdUser;
+        $this->assertArrayHasKey('_id', $result);
+        $this->assertArrayHasKey('firstName', $result);
+        $this->assertArrayHasKey('lastName', $result);
+        $this->assertArrayHasKey('phoneNumbers', $result);
 
-    //     return $createdUser;
-    // }
+    }
 
-    // /**
-    // * @test
-    // */
-    // public function testGuzzle(){
-    //     $token = '5eefa2ed1f30d4f3d704100a591fbf73';
-    //     $baseUrl = 'https://api.serverdensity.io';
-    //     $url = '/users/users?token=';
-    //     $client = new NewGuzzle();
+    /**
+    * @test
+    * @depends shouldCreateUser
+    */
+    public function shouldViewAllUsers(){
 
-    //     $request = $client->get($url.$token);
-    //     $response = $request->send();
-    //     // echo $response;
+        $result = $this->client->api('users')->all();
 
-    //     // url- form urlencoded ok.
-    // }
 
-    // /**
-    // * @test
-    // */
-    // public function postGuzzle()
-    // {
+        $this->assertGreaterThan(0, count($result));
+        $this->assertEquals(true, is_array($result[0]));
 
-    //     $token = '';
-    //     $baseUrl = 'https://api.serverdensity.io/users/users?token=5eefa2ed1f30d4f3d704100a591fbf73';
-    //     $httpbin = 'http://httpbin.org/post';
-    //     $url = '';
+        $this->assertArrayHasKey('_id', $result[0]);
+        $this->assertArrayHasKey('firstName', $result[0]);
+        $this->assertArrayHasKey('lastName', $result[0]);
+        $this->assertArrayHasKey('emailAddresses', $result[0]);
 
-    //     $user = [
-    //         'body' => [
-    //             'login' => 'Llama',
-    //             'firstName' => 'Hat',
-    //             'lastName' => 'llama',
-    //             'password' => 'password'
-    //         ]
-    //     ];
+    }
 
-    //     $client = new GuzzleClient();
-    //     try {
-    //         $req = $client->post($baseUrl, array(), $user);
-    //         $response2 = $client->send($req);
-    //     } catch ( ClientErrorResponseException $e){
-    //         echo $e->getResponse();
-    //     }
-    //     echo $response2;
 
-    // }
+    /**
+    * @test
+    * @depends shouldCreateUser
+    */
+    public function shouldUpdateUser($createdUser){
+        $fields = array(
+            'firstName' => 'AnotherName',
+            'emailAddresses' => ['newEmail@gmail.com']
+        );
 
-    // /**
-    // * @test
-    // */
-    // public function postGuzzle()
-    // {
+        $result = $this->client->api('users')->update($createdUser['_id'], $fields);
 
-    //     $token = '';
-    //     $baseUrl = 'https://api.serverdensity.io/users/users?token=5eefa2ed1f30d4f3d704100a591fbf73';
-    //     $httpbin = 'http://httpbin.org/post';
-    //     $url = '';
+        $this->assertArrayHasKey('firstName', $result);
+        $this->assertEquals($fields['firstName'], $result['firstName']);
+        $this->assertArrayHasKey('emailAddresses', $result);
+        $this->assertEquals($fields['emailAddresses'][0], $result['emailAddresses'][0]);
+    }
 
-    //     $user = [
-    //         'body' => [
-    //             'login' => 'Llama',
-    //             'firstName' => 'Hat',
-    //             'lastName' => 'llama',
-    //             'password' => 'password'
-    //         ]
-    //     ];
+    /**
+    * @test
+    * @depends shouldCreateUser
+    */
+    public function shouldDeleteUser($createdUser){
 
-    //     $client = new NewGuzzle();
-    //     try {
-    //         $response = $client->post($baseUrl, $user);
-    //     } catch ( ClientException $e){
-    //         echo $e->getResponse();
-    //         echo $response->getBody();
-    //     }
+        $result = $this->client->api('users')->delete($createdUser['_id']);
 
-    // }
+        $this->assertArrayHasKey('_id', $result);
+        $this->assertEquals($createdUser['_id'], $result['_id']);
 
-    // /**
-    // * @test
-    // */
-    // public function shouldGetUser(){
-    //     $user = $this->client->api('users')->view('548999b995fe3506532d991f');
-    //     $this->assertArrayHasKey('_id', $user);
-    // }
+    }
+
 }
