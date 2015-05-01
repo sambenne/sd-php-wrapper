@@ -8,6 +8,7 @@ use serverdensity\Exception\ApiLimitExceedException;
 use serverdensity\Exception\ErrorException;
 use serverdensity\Exception\RuntimeException;
 use serverdensity\Exception\ValidationFailedException;
+use serverdensity\Exception\InvalidTokenException;
 
 use GuzzleHttp\Message\Response;
 use GuzzleHttp\Event\ErrorEvent;
@@ -35,54 +36,53 @@ class ErrorListener
      */
     public function onRequestError(ErrorEvent $event)
     {
-        /** @var $request \Guzzle\Http\Message\Request */
         $request = $event->getRequest();
-        $response = $event->getResponse();
+        $hasResponse = $event->hasResponse();
+        if ($hasResponse){
+            $response = $event->getResponse();
+            echo $response;
+            if ($this->isClientError($response) || $this->isServerError($response)) {
+                $remaining = (string) $response->getHeader('X-RateLimit-Remaining');
 
-        if ($this->isClientError($response) || $this->isServerError($response)) {
-            $remaining = (string) $response->getHeader('X-RateLimit-Remaining');
-
-            if (null != $remaining && 1 > $remaining && 'rate_limit' !== substr($request->getResource(), 1, 10)) {
-                throw new ApiLimitExceedException($this->options['api_limit']);
-            }
-
-            $content = ResponseMediator::getContent($response);
-            if (is_array($content) && isset($content['message'])) {
-                if (400 == $response->getStatusCode()) {
-                    throw new ErrorException($content['message'], 400);
-                } elseif (422 == $response->getStatusCode() && isset($content['errors'])) {
-                    $errors = array();
-                    foreach ($content['errors'] as $error) {
-                        switch ($error['code']) {
-                            case 'missing':
-                                $errors[] = sprintf('The %s %s does not exist, for resource "%s"', $error['field'], $error['value'], $error['resource']);
-                                break;
-
-                            case 'missing_field':
-                                $errors[] = sprintf('Field "%s" is missing, for resource "%s"', $error['field'], $error['resource']);
-                                break;
-
-                            case 'invalid':
-                                $errors[] = sprintf('Field "%s" is invalid, for resource "%s"', $error['field'], $error['resource']);
-                                break;
-
-                            case 'already_exists':
-                                $errors[] = sprintf('Field "%s" already exists, for resource "%s"', $error['field'], $error['resource']);
-                                break;
-
-                            default:
-                                $errors[] = $error['message'];
-                                break;
-
-                        }
-                    }
-
-                    throw new ValidationFailedException('Validation Failed: ' . implode(', ', $errors), 422);
+                if (null != $remaining && 1 > $remaining && 'rate_limit' !== substr($request->getResource(), 1, 10)) {
+                    throw new ApiLimitExceedException($this->options['api_limit']);
                 }
-            }
 
-            throw new RuntimeException(isset($content['message']) ? $content['message'] : $content, $response->getStatusCode());
-        };
+                $content = ResponseMediator::getContent($response);
+                if (is_array($content) && isset($content['message'])) {
+
+                    if (401 == $response->getStatusCode()) {
+                        throw new InvalidTokenException("Your authentication token is invalid", $request);
+                    }
+                    elseif (400 == $response->getStatusCode() && isset($content['errors'])) {
+                        if (isset($content['errors']['subject']) && $content['errors']['subject'] === 'token'){
+                            throw new InvalidTokenException("Your authentication token is missing", $request);
+                        }
+                        $errors = array();
+                        foreach ($content['errors'] as $error) {
+                            switch ($error['type']) {
+                                case 'missing_param':
+                                    $errors[] = sprintf("The following error occurred: '%s' for parameter '%s'", $error['description'], $error['param']);
+                                    break;
+
+                                case 'duplicate_param':
+                                    $errors[] = sprintf("'%s', for parameter '%s'", $error['description'], $error['param']);
+                                    break;
+
+                                default:
+                                    $errors[] = $error['message'];
+                                    break;
+
+                            }
+                        }
+
+                        throw new ValidationFailedException('Validation Failed: ' . implode("\n", $errors), $request, $response);
+                    }
+                }
+
+                throw new RuntimeException(isset($content['message']) ? $content['message'] : $content, $response->getStatusCode());
+            };
+        }
     }
 
     public function isClientError($response){

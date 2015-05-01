@@ -24,13 +24,11 @@ class AuthListener
         if (null === $this->method) {
             return;
         }
-
         switch ($this->method) {
             case Client::AUTH_URL_TOKEN:
                 $url = $event->getRequest()->getUrl();
                 $url .= (false === strpos($url, '?') ? '?' : '&');
                 $url .= utf8_encode(http_build_query(array('token' => $this->token), '', '&'));
-
                 $event->getRequest()->setUrl($url);
                 break;
 
