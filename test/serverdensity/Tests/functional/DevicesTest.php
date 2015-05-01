@@ -13,12 +13,12 @@ class DevicesTest extends TestCase
     * @test
     */
     public function shouldCreateDevice(){
-        $user = array(
+        $device = array(
             "name" => "MyNewDevice",
             "publicIPs" => array("192.161.1.1")
         );
 
-        $createdDevice = $this->client->api('devices')->create($user);
+        $createdDevice = $this->client->api('devices')->create($device);
 
 
         $this->assertArrayHasKey('_id', $createdDevice);

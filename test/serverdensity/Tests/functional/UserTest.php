@@ -1,11 +1,6 @@
 <?php
 namespace serverdensity\Tests\functional;
 
-use GuzzleHttp\Client as NewGuzzle;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\RequestException;
-
-use serverdensity\Exception\RuntimeException;
 use serverdensity\HttpClient\HttpClient as HttpClient;
 
 /**
@@ -15,14 +10,6 @@ class UserTest extends TestCase
 {
     protected $user;
 
-    // /**
-    // * @depends shouldCreateUser
-    // */
-    // public static function tearDownAfterClass()
-    // {
-    //     print_r($this->user);
-    // }
-//
     /**
     * @test
     */
