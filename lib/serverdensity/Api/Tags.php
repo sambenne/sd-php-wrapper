@@ -61,11 +61,20 @@ class Tags extends AbstractApi
     /**
     * Create a tag
     * @link     https://apidocs.serverdensity.com/?shell#creating-new-tags
-    * @param    array $fields tag with all necessary fields
+    * @param    string $name name of tag
+    * @param    string $hexColor hexcolor of tag
     * @return   an array with the fields of the tag that got created
     */
-    public function create($fields)
+    public function create($name, $hexColor = null)
     {
+        if (empty($hexColor)){
+            # generates random hexcode.
+            $hexColor = "#".substr(md5(rand()), 0, 6);
+        }
+        $fields = array(
+            "name" => $name,
+            "color" => $hexColor
+        );
         return $this->post('inventory/tags/', $fields);
     }
 

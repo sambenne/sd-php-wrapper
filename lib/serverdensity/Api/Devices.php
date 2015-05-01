@@ -37,7 +37,7 @@ class Devices extends AbstractApi
     /**
     * Search for a device
     * @link     https://apidocs.serverdensity.com/?python#searching-for-a-device
-    * @param    array   $filter     an array of fields to map to.
+    * @param    array   $filter     an array of fields with which to search.
     * @param    array   $fields     an array of fields to keep in output.
     * @return   an array of arrays with devices.
     */
