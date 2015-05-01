@@ -42,7 +42,6 @@ class ErrorListener
         $hasResponse = $event->hasResponse();
         if ($hasResponse){
             $response = $event->getResponse();
-            echo $response;
             if ($this->isClientError($response) || $this->isServerError($response)) {
                 $remaining = (string) $response->getHeader('X-RateLimit-Remaining');
 
@@ -72,10 +71,11 @@ class ErrorListener
                                     break;
 
                                 case 'invalid_param':
-                                    $errors[] = sprintf("This field '%s' contains an invalid parameter", $error['param']);
+                                    $errors[] = sprintf("This field '%s' contains an invalid parameter; '%s'", $error['param'], $error['description']);
+                                    break;
 
                                 default:
-                                    $errors[] = $error['message'];
+                                    $errors[] = $content['message'];
                                     break;
 
                             }

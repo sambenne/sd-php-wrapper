@@ -3,7 +3,7 @@
 namespace serverdensity\HttpClient;
 
 use serverdensity\Exception\InvalidArgumentException;
-use Guzzle\Http\Message\Response;
+use GuzzleHttp\Message\Response;
 
 /**
  * Performs requests on Server Density API. API documentation should be self-explanatory.
@@ -78,7 +78,7 @@ interface HttpClientInterface
      * @param string $httpMethod HTTP method to use
      * @param array  $headers    Request headers
      *
-     * @return Response
+     *
      */
     public function request($path, $body, $httpMethod = 'GET', array $headers = array());
 
