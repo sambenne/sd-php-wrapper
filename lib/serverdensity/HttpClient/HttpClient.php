@@ -15,6 +15,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Message\Request;
 use GuzzleHttp\Message\Response;
+use ReflectionClass;
 
 
 /**
@@ -24,26 +25,22 @@ use GuzzleHttp\Message\Response;
  */
 class HttpClient implements HttpClientInterface
 {
-    use HasEmitterTrait;
 
     protected $options = array(
         'base_url'    => 'https://api.serverdensity.io/',
         'defaults'    => [
-            'headers' => ['user-agent' => 'SD-php-api']
-
-        ],
+            'headers' => ['user-agent' => 'SD-php-api']]
 
         'timeout'     => 10,
-        'api_limit'   => 5000,
-        'api_version' => 'v2',
+        // 'api_limit'   => 5000,
+        // 'api_version' => 'v2',
     );
 
     protected $headers = array();
 
-    // make option to hold the two classes for auth and errorlistener.
     private $lastResponse;
     private $lastRequest;
-    private $eventClasses = array();
+    private $client;
 
     /**
      * @param array           $options
@@ -54,18 +51,15 @@ class HttpClient implements HttpClientInterface
         $this->options = array_merge($this->options, $options);
         $client = $client ?: new GuzzleClient($this->options);
         $this->client  = $client;
+        $options = $this->options;
 
-        $this->getEmitter()->on(
-            'error', function (ErrorEvent $event){
+        $this->client->getEmitter()->on(
+            'error', function (ErrorEvent $event) use ($options){
                 $listener = new ErrorListener($this->options);
                 $listener->onRequestError($event);
         });
 
-        // $this->getEmitter()->on(
-        //     'error', [new ErrorListener($this->options), 'onRequestError']);
-
-        // $this->addListener('error', array(new ErrorListener($this->options), 'onRequestError'));
-        $this->clearHeaders();
+        // $this->clearHeaders();
     }
 
     /**
@@ -89,10 +83,10 @@ class HttpClient implements HttpClientInterface
      */
     public function clearHeaders()
     {
-        $this->headers = array(
-            'Accept' => sprintf('application/vnd.github.%s+json', $this->options['api_version']),
-            'User-Agent' => sprintf('%s', $this->options['defaults']['headers']['user-agent']),
-        );
+        // $this->headers = array(
+        //     'Accept' => sprintf('application/vnd.github.%s+json', $this->options['api_version']),
+        //     'User-Agent' => sprintf('%s', $this->options['defaults']['headers']['user-agent']),
+        // );
     }
 
     public function addListener($eventName, $listener)
@@ -155,19 +149,11 @@ class HttpClient implements HttpClientInterface
         if(!empty($body)){
             $options = array_merge($options, ['body' => $body]);
         }
-        $options = array_merge($options, ['headers' => $headers]);
 
-        $request = $this->createRequest($httpMethod, $path, $options);
+        $request = $this->client->createRequest($httpMethod, $path, $options);
 
-        try {
-            $response = $this->client->send($request);
-        } catch (\LogicException $e) {
-            throw new ErrorException($e->getMessage(), $e->getCode(), $e);
-        } catch (TwoFactorAuthenticationRequiredException $e) {
-            throw $e;
-        } catch (\RuntimeException $e) {
-            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
-        }
+        // Errors handled in ErrorListener.php
+        $response = $this->client->send($request);
 
         $this->lastRequest  = $request;
         $this->lastResponse = $response;
@@ -180,16 +166,10 @@ class HttpClient implements HttpClientInterface
      */
     public function authenticate($token, $method)
     {
-        if(array_key_exists('AuthListener', $this->eventClasses)){
-            $authlistener = $this->eventClasses['AuthListener'];
-        } else {
-            $this->eventClasses['AuthListener'] = new AuthListener($token, $method);
-            $authlistener = $this->eventClasses['AuthListener'];
-        }
-
-        $this->getEmitter()->on(
-            'before', function (BeforeEvent $event, $authlistener){
-                $authlistener->onRequestBeforeSend($event);
+        $this->client->getEmitter()->on(
+            'before', function (BeforeEvent $event) use ($token, $method){
+                $auth = new AuthListener($token, $method);
+                $auth->onRequestBeforeSend($event);
             });
     }
 
@@ -209,12 +189,4 @@ class HttpClient implements HttpClientInterface
         return $this->lastResponse;
     }
 
-    protected function createRequest($httpMethod, $path, array $options = array())
-    {
-        return $this->client->createRequest(
-            $httpMethod,
-            $path,
-            $options
-        );
-    }
 }
