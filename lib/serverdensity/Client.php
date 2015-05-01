@@ -19,6 +19,16 @@ class Client
      */
     private $httpClient;
 
+    private $options = array(
+        'base_url'    => 'https://api.serverdensity.io/',
+        'defaults'    =>
+            ['headers' => ['user-agent' => 'SD-php-api']],
+
+        'timeout'     => 10,
+        // 'api_limit'   => 5000,
+        // 'api_version' => 'v2',
+    );
+
     /**
      * Instantiate a new Server Density client.
      *
@@ -27,10 +37,6 @@ class Client
     public function __construct(HttpClientInterface $httpClient = null) {
         $this->httpClient = $httpClient;
     }
-
-    private $options = array(
-        'timeout' => 10
-    );
 
     public function api($name) {
         switch($name){
@@ -93,7 +99,7 @@ class Client
     public function getHttpClient()
     {
         if ($this->httpClient === null) {
-            $this->httpClient = new HttpClient();
+            $this->httpClient = new HttpClient($this->options);
         }
 
         return $this->httpClient;
