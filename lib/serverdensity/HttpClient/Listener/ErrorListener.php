@@ -9,6 +9,8 @@ use serverdensity\Exception\ErrorException;
 use serverdensity\Exception\RuntimeException;
 use serverdensity\Exception\ValidationFailedException;
 use serverdensity\Exception\InvalidTokenException;
+use serverdensity\Exception\NotFoundException;
+
 
 use GuzzleHttp\Message\Response;
 use GuzzleHttp\Event\ErrorEvent;
@@ -69,6 +71,9 @@ class ErrorListener
                                     $errors[] = sprintf("'%s', for parameter '%s'", $error['description'], $error['param']);
                                     break;
 
+                                case 'invalid_param':
+                                    $errors[] = sprintf("This field '%s' contains an invalid parameter", $error['param']);
+
                                 default:
                                     $errors[] = $error['message'];
                                     break;
@@ -78,9 +83,13 @@ class ErrorListener
 
                         throw new ValidationFailedException('Validation Failed: ' . implode("\n", $errors), $request, $response);
                     }
+
+                    elseif (404 == $response->getStatusCode()){
+                        throw new NotFoundException($content['message'], $request, $response);
+                    }
                 }
 
-                throw new RuntimeException(isset($content['message']) ? $content['message'] : $content, $response->getStatusCode());
+                throw new RuntimeException("Another Error Occurred: ". $content['message'], $request, $response);
             };
         }
     }
