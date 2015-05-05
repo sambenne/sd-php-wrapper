@@ -48,39 +48,15 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \serverdensity\Exception\RuntimeException
-     */
-    public function shouldNotPassWhenContentWasNotValidJson()
-    {
-        $response = $this->getMockBuilder('GuzzleHttp\Message\Response')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $response->expects($this->any())
-            ->method('getStatusCode')
-            ->will($this->returnValue(400));
-
-        $response->expects($this->once())
-            ->method('getHeader')
-            ->with('X-RateLimit-Remaining')
-            ->will($this->returnValue(5000));
-
-        $response->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue('fail'));
-
-        $listener = new ErrorListener(array('api_limit' => 5000));
-        $listener->onRequestError($this->getEventMock($response));
-    }
-
-    /**
-     * @test
-     * @expectedException \serverdensity\Exception\RuntimeException
+     * @expectedException \serverdensity\Exception\NotFoundException
      */
     public function shouldNotPassWhenContentWasValidJsonButStatusIsNotCovered()
     {
-        $response = $this->getMockBuilder('Guzzle\Http\Message\Response')
-            ->disableOriginalConstructor()
+        //$this->setExpectedException('serverdensity\Exception\NotFoundException');
+
+        $response = $this->getMockBuilder('GuzzleHttp\Message\Response')
+            ->setConstructorArgs([404])
+            //->disableOriginalConstructor()
             ->getMock();
 
         $response->expects($this->any())
@@ -106,11 +82,11 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \serverdensity\Exception\ErrorException
+     * @expectedException \serverdensity\Exception\RuntimeException
      */
     public function shouldNotPassWhen400IsSent()
     {
-        $response = $this->getMockBuilder('Guzzle\Http\Message\Response')
+        $response = $this->getMockBuilder('GuzzleHttp\Message\Response')
             ->disableOriginalConstructor()
             ->getMock();
         $response->expects($this->once())
@@ -133,21 +109,20 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
      * @dataProvider getErrorCodesProvider
      * @expectedException \serverdensity\Exception\ValidationFailedException
      */
-    public function shouldNotPassWhen422IsSentWithErrorCode($errorCode)
+    public function shouldNotPassWhen400IsSentWithErrorCode($errorCode)
     {
         $content = json_encode(array(
             'message' => 'Validation Failed',
             'errors'  => array(
                 array(
-                    'code'     => $errorCode,
-                    'field'    => 'test',
-                    'value'    => 'wrong',
-                    'resource' => 'fake'
+                    'type'     => $errorCode,
+                    'description'    => 'This went wrong',
+                    'param'    => 'login'
                 )
             )
         ));
 
-        $response = $this->getMockBuilder('Guzzle\Http\Message\Response')
+        $response = $this->getMockBuilder('GuzzleHttp\Message\Response')
             ->disableOriginalConstructor()
             ->getMock();
         $response->expects($this->once())
@@ -159,7 +134,7 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($content));
         $response->expects($this->any())
             ->method('getStatusCode')
-            ->will($this->returnValue(422));
+            ->will($this->returnValue(400));
 
         $listener = new ErrorListener(array('api_limit' => 5000));
         $listener->onRequestError($this->getEventMock($response));
@@ -168,16 +143,15 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
     public function getErrorCodesProvider()
     {
         return array(
-            array('missing'),
-            array('missing_field'),
-            array('invalid'),
-            array('already_exists'),
+            array('missing_param'),
+            array('duplicate_param'),
+            array('invalid_param'),
         );
     }
 
     private function getEventMock($response)
     {
-        $mock = $this->getMockBuilder('GuzzleHttp\Event\ErrorEvent')
+        $eventMock = $this->getMockBuilder('GuzzleHttp\Event\ErrorEvent')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -185,15 +159,23 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mock->expects($this->any())
+        // $response = $this->getMockBuilder('GuzzleHttp\Message\Response')
+        //     ->disableOriginalConstructor()
+        //     ->getMock();
+
+        $eventMock->expects($this->any())
+            ->method('hasResponse')
+            ->will($this->returnValue(true));
+
+        $eventMock->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue($request));
 
-        $mock->expects($this->any())
+        $eventMock->expects($this->any())
             ->method('getResponse')
             ->will($this->returnValue($response));
 
-        return $mock;
+        return $eventMock;
     }
 
 }

@@ -14,8 +14,10 @@ class AuthListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldHaveKnownMethodName()
     {
+        $request = $this->getMock('GuzzleHttp\Message\RequestInterface');
+
         $listener = new AuthListener('test', 'unknown');
-        $listener->onRequestBeforeSend($this->getEventMock());
+        $listener->onRequestBeforeSend($this->getEventMock($request));
     }
 
     /**
