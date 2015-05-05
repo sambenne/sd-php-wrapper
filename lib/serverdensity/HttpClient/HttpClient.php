@@ -29,7 +29,7 @@ class HttpClient implements HttpClientInterface
     protected $options = array(
         'base_url'    => 'https://api.serverdensity.io/',
         'defaults'    => [
-            'headers' => ['user-agent' => 'SD-php-api']]
+            'headers' => ['user-agent' => 'SD-php-api']],
 
         'timeout'     => 10,
         // 'api_limit'   => 5000,
