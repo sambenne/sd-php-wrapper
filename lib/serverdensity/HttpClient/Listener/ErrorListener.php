@@ -46,12 +46,11 @@ class ErrorListener
                 $remaining = (string) $response->getHeader('X-RateLimit-Remaining');
 
                 if (null != $remaining && 1 > $remaining && 'rate_limit' !== substr($request->getResource(), 1, 10)) {
-                    throw new ApiLimitExceedException($this->options['api_limit']);
+                    throw new ApiLimitExceedException($this->options['api_limit'], $request);
                 }
 
                 $content = ResponseMediator::getContent($response);
                 if (is_array($content) && isset($content['message'])) {
-
                     if (401 == $response->getStatusCode()) {
                         throw new InvalidTokenException("Your authentication token is invalid", $request);
                     }
@@ -88,7 +87,6 @@ class ErrorListener
                         throw new NotFoundException($content['message'], $request, $response);
                     }
                 }
-
                 throw new RuntimeException("Another Error Occurred: ". $content['message'], $request, $response);
             };
         }

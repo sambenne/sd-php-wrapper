@@ -40,7 +40,7 @@ class HttpClient implements HttpClientInterface
 
     private $lastResponse;
     private $lastRequest;
-    private $client;
+    public $client;
 
     /**
      * @param array           $options
@@ -148,6 +148,10 @@ class HttpClient implements HttpClientInterface
     {
         if(!empty($body)){
             $options = array_merge($options, ['body' => $body]);
+        }
+
+        if(!empty($headers)){
+            $options = array_merge($options, ['headers' => $headers]);
         }
 
         $request = $this->client->createRequest($httpMethod, $path, $options);

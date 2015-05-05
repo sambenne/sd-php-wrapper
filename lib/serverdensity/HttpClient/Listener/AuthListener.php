@@ -24,6 +24,7 @@ class AuthListener
         if (null === $this->method) {
             return;
         }
+        $request = $event->getRequest();
         switch ($this->method) {
             case Client::AUTH_URL_TOKEN:
                 $url = $event->getRequest()->getUrl();
@@ -33,7 +34,7 @@ class AuthListener
                 break;
 
             default:
-                throw new RuntimeException(sprintf('%s not yet implemented', $this->method));
+                throw new RuntimeException(sprintf('%s not yet implemented', $this->method), $request);
                 break;
         }
     }
