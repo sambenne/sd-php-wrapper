@@ -15,7 +15,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         // You have to specify authentication here to run full suite
         $client = new Client();
-        $client->authenticate('5eefa2ed1f30d4f3d704100a591fbf73');
+        $client->authenticate('auth_token_here');
 
         try {
             $client->api('user')->all();
