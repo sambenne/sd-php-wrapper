@@ -65,6 +65,11 @@ class Client
                 $api = new Api\Alerts($this);
                 break;
 
+            case 'metric':
+            case 'metrics':
+                $api = new Api\Metrics($this);
+                break;
+
             default:
                 throw new InvalidArgumentException(sprintf('Undefined api instance called: "%s"', $name));
         }
