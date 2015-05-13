@@ -43,8 +43,8 @@ class MetricsTest extends TestCase
             )
         );
 
-        $filter = array(
-            'networkTraffic' => json_encode(array(
+        $filter = json_encode(array(
+            'networkTraffic' => array(
                 'eth0' => ['rxMByteS']
             ))
         );
