@@ -56,6 +56,17 @@ class TagsTest extends TestCase
         $this->assertArrayHasKey('name', $result[0]);
     }
 
+    /**
+    * @test
+    * @depends shouldCreateTags
+    */
+    public function shouldFindAllTags($createdTag){
+        $result = $this->client->api('tags')->findAll(['MyNewTag1', 'imaginary']);
+
+        $this->assertEquals($result['tags'][0], $createdTag);
+        $this->assertEquals($result['notFound'][0], 'imaginary');
+    }
+
 
     /**
     * @test

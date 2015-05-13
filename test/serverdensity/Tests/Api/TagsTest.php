@@ -27,6 +27,44 @@ class TagsTest extends TestCase
     /**
     * @test
     */
+    public function testFormat(){
+        $tags = array(
+            [
+                '_id' => '123123123',
+                'name' => 'tag1',
+                'color' => 'f0f0f0'
+            ],
+            [
+                '_id' => '121212',
+                'name' => 'tag2',
+                'color' => 'f1f1f1'
+            ]
+        );
+
+        $expectedUserFormat = array(
+            'tags' => [
+                ['123123123' => 'readWrite'],
+                ['121212' => 'readWrite']
+            ]
+        );
+
+        $expectedOtherFormat = array(
+            'tags' => [
+                '123123123',
+                '121212'
+            ]
+        );
+
+        $api = $this->getApiMock('tags');
+        $userFormatted = $api->format($tags, 'user');
+        $otherFormatted = $api->format($tags, 'other');
+        $this->assertEquals($expectedUserFormat, $userFormatted);
+        $this->assertEquals($expectedOtherFormat, $otherFormatted);
+    }
+
+    /**
+    * @test
+    */
     public function shouldGetAllTags(){
         $expectedArray = array(
             array('_id' => '1', 'name' => 'myTag'),

@@ -2,6 +2,8 @@
 
 namespace serverdensity\Api;
 
+use serverdensity\Exception\ErrorException;
+
 class Tags extends AbstractApi
 {
 
@@ -49,13 +51,70 @@ class Tags extends AbstractApi
         $tags = $this->all();
 
         $found = array();
-        foreach ($tags as $array){
-            if ($array['name'] === $name){
-                $found = $array;
+        foreach ($tags as $tag){
+            if ($tag['name'] === $name){
+                $found = $tag;
                 break;
             }
         }
         return $found;
+    }
+
+    /**
+    * Find all tags by name
+    * @param    array   names   tag names in an array
+    * @return   an array of array objects.
+    */
+    public function findAll(array $names)
+    {
+        $tags = $this->all();
+        $transformTags = function($array) {
+                $newArray = array();
+                foreach($array as $entry){
+                    $newArray[$entry['name']] = $entry;
+                }
+                return $newArray;
+            };
+        $tagNames = $transformTags($tags);
+        $found = array(
+            'tags' => array(),
+            'notFound' => array()
+        );
+        foreach ($names as $name){
+            if (in_array($name, array_keys($tagNames))){
+                $found['tags'][] = $tagNames[$name];
+            } else {
+                $found['notFound'][] = $name;
+            }
+        }
+        return $found;
+    }
+
+    /**
+    * Format tags to be inserted
+    * @param    array   tags    an array of tags
+    * @param    string  type    either user or other
+    * @return   formatted tags
+    */
+    public function format($tags, $type)
+    {
+        $formattedTags = array();
+        if ($type === 'user'){
+            $formattedTags['tags'] = array();
+            foreach($tags as $tag){
+                $formattedTags['tags'][] = array(
+                    $tag['_id'] => 'readWrite'
+                );
+            }
+        } else if ($type === 'other'){
+            foreach($tags as $tag){
+                $formattedTags['tags'][] = $tag['_id'];
+            }
+        } else {
+            throw ErrorException("Only 'user' and 'other' are allowed types");
+        }
+
+        return $formattedTags;
     }
 
     /**
