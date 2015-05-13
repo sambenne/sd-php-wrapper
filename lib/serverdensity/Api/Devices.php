@@ -10,7 +10,20 @@ class Devices extends AbstractApi
     * @param    array  $device with all its attributes.
     * @return   an array that is the device.
     */
-    public function create($device){
+    public function create($device, array $tagNames = array()){
+        if (!empty($tagNames)){
+            $tagEndpoint = new Tags($this->client);
+            $tags = $tagEndpoint->findAll($tagNames);
+            if(!empty($tags['notFound'])){
+                foreach($tags['notFound'] as $name){
+                    $tags['tags'][] = $tagEndpoint->create($name);
+                }
+            }
+
+            $formattedTags = $tagEndpoint->format($tags['tags'], 'other');
+            $device['tags'] = $formattedTags['tags'];
+        }
+
         $device = $this->makeJsonReady($device);
         return $this->post('inventory/devices/', $device);
     }

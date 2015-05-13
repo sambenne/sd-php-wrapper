@@ -29,6 +29,29 @@ class DevicesTest extends TestCase
         return $createdDevice;
     }
 
+    /**
+    * @test
+    */
+    public function shouldCreateDeviceWithTag(){
+        $device = array(
+            "name" => "MyNewDevice",
+            "publicIPs" => array("192.161.1.1")
+        );
+
+        $createdDevice = $this->client->api('devices')->create($device, ['my', 'tags']);
+
+        $my = $this->client->api('tags')->find('my');
+        $tag = $this->client->api('tags')->find('tags');
+
+        $this->assertEquals($my['_id'], $createdDevice['tags'][0]);
+        $this->assertEquals($tag['_id'], $createdDevice['tags'][1]);
+
+        //teardown
+        $this->client->api('tags')->delete($tag['_id']);
+        $this->client->api('tags')->delete($my['_id']);
+        $this->client->api('devices')->delete($createdDevice['_id']);
+    }
+
 
     /**
     * @test

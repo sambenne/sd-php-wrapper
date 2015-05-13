@@ -11,7 +11,20 @@ class Services extends AbstractApi
     * @param    array  $service with all it's attributes.
     * @return   an array that is the device.
     */
-    public function create($service){
+    public function create($service, array $tagNames = array()){
+        if (!empty($tagNames)){
+            $tagEndpoint = new Tags($this->client);
+            $tags = $tagEndpoint->findAll($tagNames);
+            if(!empty($tags['notFound'])){
+                foreach($tags['notFound'] as $name){
+                    $tags['tags'][] = $tagEndpoint->create($name);
+                }
+            }
+
+            $formattedTags = $tagEndpoint->format($tags['tags'], 'other');
+            $service['tags'] = $formattedTags['tags'];
+        }
+
         $service = $this->makeJsonReady($service);
         return $this->post('inventory/services/', $service);
     }

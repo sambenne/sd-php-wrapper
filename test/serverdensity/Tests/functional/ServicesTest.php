@@ -36,6 +36,35 @@ class ServicesTest extends TestCase
         return $createdService;
     }
 
+    /**
+    * @test
+    */
+    public function shouldCreateServiceWithTag(){
+        $service = array(
+            "name" => "MyNewService",
+            "checkType" => "http",
+            "checkMethod" => "GET",
+            "checkUrl" => "http://www.serverdensity.com",
+            "timeout" => 10,
+            "checkLocations" => ['lon'],
+            "slowThreshold" => 100,
+
+        );
+
+        $createdService = $this->client->api('services')->create($service, ['my', 'tags']);
+
+        $my = $this->client->api('tags')->find('my');
+        $tag = $this->client->api('tags')->find('tags');
+
+        $this->assertEquals($my['_id'], $createdService['tags'][0]);
+        $this->assertEquals($tag['_id'], $createdService['tags'][1]);
+
+        //teardown
+        $this->client->api('tags')->delete($tag['_id']);
+        $this->client->api('tags')->delete($my['_id']);
+        $this->client->api('services')->delete($createdService['_id']);
+    }
+
 
     /**
     * @test
