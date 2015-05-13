@@ -40,8 +40,21 @@ class Users extends AbstractApi
     * @param    array $user
     * @return   an array with the user that got created
     */
-    public function create(array $user)
+    public function create(array $user, array $tagNames = array())
     {
+        if (!empty($tagNames)){
+            $tagEndpoint = new Tags($this->client);
+            $tags = $tagEndpoint->findAll($tagNames);
+            if(!empty($tags['notFound'])){
+                foreach($tags['notFound'] as $name){
+                    $tags['tags'][] = $tagEndpoint->create($name);
+                }
+            }
+
+            $formattedTags = $tagEndpoint->format($tags['tags'], 'user');
+            $user['permissions'] = $formattedTags;
+        }
+
         $user = $this->makeJsonReady($user);
         return $this->post('users/users/', $user);
     }

@@ -54,6 +54,38 @@ class UserTest extends TestCase
 
     /**
     * @test
+    */
+    public function shouldCreateUserWithTag(){
+        $user = array(
+            "_id" => '1234567890',
+            "admin" => true,
+            "firstName" => "Llama2",
+            "lastName" => "Hat2",
+            "login" => "llama2",
+            "password" => "password",
+            "emailAddresses" => array(
+                "llama2@gmail.com"
+            ),
+            "phoneNumbers" => array(
+                "+342351412"
+            )
+        );
+
+        $createdUser = $this->client->api('users')->create($user, ['my', 'tags']);
+        $my = $this->client->api('tags')->find('my');
+        $tag = $this->client->api('tags')->find('tags');
+
+        $this->assertEquals($my['_id'], key($createdUser['permissions']['tags'][0]));
+        $this->assertEquals($tag['_id'], key($createdUser['permissions']['tags'][1]));
+
+        //teardown
+        $this->client->api('tags')->delete($tag['_id']);
+        $this->client->api('tags')->delete($my['_id']);
+        $this->client->api('users')->delete($createdUser['_id']);
+    }
+
+    /**
+    * @test
     * @depends shouldCreateUser
     */
     public function shouldGetErrorWhenDuplicatingUser(){
