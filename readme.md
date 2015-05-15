@@ -14,7 +14,7 @@ To run the tests run the following command in the terminal
 
 To run functional tests you need to type in the following. This will only run the functional tests. You need to submit your own token for this to work though. Which you can do in the following path: `test/serverdensity/Tests/functional/TestCase`.
 
-       vendor/phpunit/phpunit/phpunit --group functional test
+    vendor/phpunit/phpunit/phpunit --group functional test
 
 ## How to use it
 

@@ -4,6 +4,8 @@ namespace serverdensity\Api;
 
 class Metrics extends AbstractApi
 {
+    private $data;
+
     /**
     * Get available metrics
     * @link     https://apidocs.serverdensity.com/?python#available-metrics
@@ -41,6 +43,44 @@ class Metrics extends AbstractApi
         $param = $this->makeJsonReady($param);
 
         return $this->get('metrics/graphs/'.urlencode($id), $param);
+    }
+
+    private function collectData($tree){
+        foreach($tree as $tr){
+            if (key_exists('data', $tr)) {
+                $this->data[] = $tr;
+            } else {
+                if (!key_exists('source', $tr)){
+                    $tr['source'] = $tr['name'];
+                }
+                foreach($tr['tree'] as $dic){
+                    $dic['source'] = $tr['source']." > ".$dic['name'];
+                }
+                $this->collectData($tr['tree']);
+            }
+        }
+    }
+
+    public function separateXYdata($data){
+        foreach($data as $graph){
+            $xPoints = array();
+            $yPoints = array();
+            foreach($graph as $point){
+                $xPoints[] = $point['x'];
+                $yPoints[] = $point['y'];
+            }
+            $graph['xPoints'] = $xPoints;
+            $graph['yPoints'] = $yPoints;
+        }
+        unset($data['data']);
+        return $data;
+    }
+
+    public function formatMetrics($data)
+    {
+        $this->data = array();
+        $this->collectData($data);
+        return $this->data;
     }
 
 }
