@@ -53,8 +53,8 @@ class Metrics extends AbstractApi
                 if (!key_exists('source', $tr)){
                     $tr['source'] = $tr['name'];
                 }
-                foreach($tr['tree'] as $dic){
-                    $dic['source'] = $tr['source']." > ".$dic['name'];
+                foreach($tr['tree'] as $key => $val){
+                    $tr['tree'][$key]['source'] = $tr['source']." > ".$val['name'];
                 }
                 $this->collectData($tr['tree']);
             }
@@ -62,15 +62,16 @@ class Metrics extends AbstractApi
     }
 
     public function separateXYdata($data){
-        foreach($data as $graph){
+        foreach($data as $key => $graph){
             $xPoints = array();
             $yPoints = array();
-            foreach($graph as $point){
+            foreach($graph['data'] as $point){
+                print_r($point);
                 $xPoints[] = $point['x'];
                 $yPoints[] = $point['y'];
             }
-            $graph['xPoints'] = $xPoints;
-            $graph['yPoints'] = $yPoints;
+            $data[$key]['xPoints'] = $xPoints;
+            $data[$key]['yPoints'] = $yPoints;
         }
         unset($data['data']);
         return $data;
