@@ -52,7 +52,13 @@ class Users extends AbstractApi
             }
 
             $formattedTags = $tagEndpoint->format($tags['tags'], 'user');
-            $user['permissions'] = $formattedTags;
+            // don't overwrite permission array if user creates his own.
+            if (!empty($user['permissions'])){
+                $user['permissions'] = array_merge($user['permissions'], $formattedTags);
+            } else {
+                $user['permissions'] = $formattedTags;
+            }
+
         }
 
         $user = $this->makeJsonReady($user);
