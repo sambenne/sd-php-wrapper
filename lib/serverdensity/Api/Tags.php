@@ -102,8 +102,8 @@ class Tags extends AbstractApi
         if ($type === 'user'){
             $formattedTags['tags'] = array();
             foreach($tags as $tag){
-                $formattedTags['tags'][] = array(
-                    $tag['_id'] => 'readWrite'
+                $formattedTags['tags'][$tag['_id']] = array(
+                    'mode' => 'readWrite'
                 );
             }
         } else if ($type === 'other'){
