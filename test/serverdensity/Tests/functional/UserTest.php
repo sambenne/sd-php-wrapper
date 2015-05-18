@@ -75,8 +75,8 @@ class UserTest extends TestCase
         $my = $this->client->api('tags')->find('my');
         $tag = $this->client->api('tags')->find('tags');
 
-        $this->assertEquals($my['_id'], key($createdUser['permissions']['tags'][0]));
-        $this->assertEquals($tag['_id'], key($createdUser['permissions']['tags'][1]));
+        $this->assertEquals(true, array_key_exists($my['_id'], $createdUser['permissions']['tags']));
+        $this->assertEquals(true, array_key_exists($tag['_id'], $createdUser['permissions']['tags']));
 
         //teardown
         $this->client->api('tags')->delete($tag['_id']);
