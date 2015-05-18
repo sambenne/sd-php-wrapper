@@ -42,10 +42,14 @@ class TagsTest extends TestCase
         );
 
         $expectedUserFormat = array(
-            'tags' => [
-                ['123123123' => 'readWrite'],
-                ['121212' => 'readWrite']
-            ]
+            'tags' => array(
+                '123123123' => array(
+                    'mode' => 'readWrite'
+                ),
+                '121212' => array(
+                    'mode' => 'readWrite'
+                )
+            )
         );
 
         $expectedOtherFormat = array(
