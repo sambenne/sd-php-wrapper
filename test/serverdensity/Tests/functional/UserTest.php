@@ -68,6 +68,9 @@ class UserTest extends TestCase
             ),
             "phoneNumbers" => array(
                 "+342351412"
+            ),
+            "permissions" => array(
+                "limited" => true
             )
         );
 
@@ -75,6 +78,7 @@ class UserTest extends TestCase
         $my = $this->client->api('tags')->find('my');
         $tag = $this->client->api('tags')->find('tags');
 
+        $this->assertEquals(true, array_key_exists('limited', $createdUser['permissions']));
         $this->assertEquals(true, array_key_exists($my['_id'], $createdUser['permissions']['tags']));
         $this->assertEquals(true, array_key_exists($tag['_id'], $createdUser['permissions']['tags']));
 
